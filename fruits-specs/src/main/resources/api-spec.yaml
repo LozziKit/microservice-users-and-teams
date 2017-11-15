@@ -1,49 +1,109 @@
 swagger: '2.0'
 info:
-  version: '0.1.0'
-  title: my simple api
-  description: An API to demonstrate Swagger
-host: localhost:8080
-basePath: /api
+  description: Bla bla bla
+  version: 1.0.0
+  title: User and team - LozziKit
+host: 'localhost:8080'
+basePath: /
+tags:
+  - name: user
+    description: Operations about user
 schemes:
   - http
+  - https
 paths:
-  /fruits:
+  /users:
     post:
-      description: create a fruit
-      operationId: createFruit
-      consumes:
+      tags:
+        - user
+      summary: Create user
+      description: Create a new user
+      operationId: createUser
+      produces:
         - application/json
       parameters:
-        - name: fruit
-          in: body
+        - in: body
+          name: body
+          description: Created user object
           required: true
           schema:
-            $ref: '#/definitions/Fruit'
+            $ref: '#/definitions/NewUser'
       responses:
         '201':
-          description: created
+          description: successful operation
+          headers:
+            Location:
+              type: string
+        '400':
+          description: Bad request
           schema:
-            type: object
+            type: string
+        '409':
+          description: Username/email exists already
     get:
-      description: get the list of all fruits
-      operationId: getFruits
+      tags:
+        - user
+      summary: Get users
+      description: Get all the users
+      operationId: getUsers
       produces:
         - application/json
       responses:
         '200':
-          description: success
+          description: successful operation
           schema:
             type: array
             items:
-              $ref: '#/definitions/Fruit'
+              type: string
+  '/users/{username}':
+    get:
+      tags:
+        - user
+      summary: Get user
+      description: Get a user
+      operationId: getUser
+      produces:
+        - application/json
+      parameters:
+        - name: username
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '404':
+          description: User not found
 definitions:
-  Fruit:
+  NewUser:
     type: object
     properties:
-      kind:
+      username:
         type: string
-      colour:
+      firstName:
         type: string
-      size:
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
         type: string
