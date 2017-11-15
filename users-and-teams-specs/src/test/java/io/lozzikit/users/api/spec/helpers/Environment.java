@@ -1,6 +1,6 @@
-package io.avalia.fruits.api.spec.helpers;
+package io.lozzikit.users.api.spec.helpers;
 
-import io.avalia.fruits.api.DefaultApi;
+import io.lozzikit.users.server.url.DefaultApi;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -15,7 +15,7 @@ public class Environment {
     public Environment() throws IOException {
         Properties properties = new Properties();
         properties.load(this.getClass().getClassLoader().getResourceAsStream("environment.properties"));
-        String url = properties.getProperty("io.avalia.fruits.server.url");
+        String url = properties.getProperty("io.lozzikit.users.server.url");
         api.getApiClient().setBasePath(url);
 
     }
