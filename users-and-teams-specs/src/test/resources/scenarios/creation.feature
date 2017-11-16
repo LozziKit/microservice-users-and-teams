@@ -2,12 +2,15 @@ Feature: Creation of users
 
   Background:
     Given there is a users server
+    Given I have a user payload
 
-  Scenario: create a user
-    Given I have a username
-    Given I have a password
+  Scenario Outline: create a user
     When I POST it to the /users endpoint
-    Then I receive a 201 status code
-    And I have a link to this user
+    Then I receive a <status> status code
+    And <infos>
 
+  Examples:
+    |status|infos|
+    |201|I have a link to this user|
+    |409|I don't have a link to this user|
 
