@@ -27,6 +27,7 @@ public class UsersApiController implements UsersApi {
     UserRepository userRepository;
 
     public ResponseEntity<Void> createUser(@ApiParam(value = "", required = true) @Valid @RequestBody NewUser user) {
+
         UserEntity newUserEntity = toUserEntity(user);
         userRepository.save(newUserEntity);
 
