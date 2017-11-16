@@ -23,7 +23,7 @@ public class ListSteps {
 
     private UserApi api;
 
-    User[] users;
+    List<User> users;
 
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
@@ -36,7 +36,11 @@ public class ListSteps {
 
     @When("^I GET users from the /users endpoint$")
     public void i_GET_users_from_the_users_endpoint() throws Throwable {
-        api.getUsers();
-        System.out.println(users);
+        users = api.getUsers();
+    }
+
+    @Then("^I've received a list of users$")
+    public void i_ve_received_a_list_of_users() throws Throwable {
+        assertNotNull(users);
     }
 }
