@@ -1,14 +1,15 @@
 package io.lozzikit.users.api.endpoints;
 
 import io.lozzikit.users.api.UsersApi;
-import io.lozzikit.users.entities.FruitEntity;
+import io.lozzikit.users.entities.UserEntity;
 import io.lozzikit.users.api.model.User;
 import io.lozzikit.users.api.model.NewUser;
-import io.lozzikit.users.repositories.FruitRepository;
+import io.lozzikit.users.repositories.UserRepository;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -23,52 +24,52 @@ import java.util.List;
 public class UsersApiController implements UsersApi {
 
     @Autowired
-    FruitRepository userRepository;
+    UserRepository userRepository;
 
     public ResponseEntity<Void> createUser(@ApiParam(value = "", required = true) @Valid @RequestBody NewUser user) {
-        FruitEntity newFruitEntity = toFruitEntity(fruit);
-        userRepository.save(newFruitEntity);
-        Long id = newFruitEntity.getId();
+        UserEntity newUserEntity = toUserEntity(user);
+        userRepository.save(newUserEntity);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(newFruitEntity.getId()).toUri();
+                .fromCurrentRequest().path("/{username}")
+                .buildAndExpand(newUserEntity.getUsername()).toUri();
 
         return ResponseEntity.created(location).build();
     }
 
-
-    public ResponseEntity<List<String>>  getUsers() {
-        List<Fruit> fruits = new ArrayList<>();
-        for (FruitEntity fruitEntity : fruitRepository.findAll()) {
-            fruits.add(toFruit(fruitEntity));
-        }
-        /*
-        Fruit staticFruit = new Fruit();
-        staticFruit.setColour("red");
-        staticFruit.setKind("banana");
-        staticFruit.setSize("medium");
-        List<Fruit> fruits = new ArrayList<>();
-        fruits.add(staticFruit);
-        */
-        return ResponseEntity.ok(fruits);
+    @Override
+    public ResponseEntity<User> getUser(@PathVariable("username") String username) {
+        User user = toUser(userRepository.findByUsername(username));
+        return ResponseEntity.ok(user);
     }
 
+    @Override
+    public ResponseEntity<List<User>>  getUsers() {
+        List<User> users = new ArrayList<>();
+        for (UserEntity userEntity : userRepository.findAll()) {
+            users.add(toUser(userEntity));
+        }
 
-    private FruitEntity toFruitEntity(Fruit fruit) {
-        FruitEntity entity = new FruitEntity();
-        entity.setColour(fruit.getColour());
-        entity.setKind(fruit.getKind());
-        entity.setSize(fruit.getSize());
+        return ResponseEntity.ok(users);
+    }
+
+    private UserEntity toUserEntity(NewUser user) {
+        UserEntity entity = new UserEntity();
+        entity.setUsername(user.getUsername());
+        entity.setFirstName(user.getFirstName());
+        entity.setLastName(user.getLastName());
+        entity.setEmail(user.getEmail());
+        entity.setPassword(user.getPassword());
         return entity;
     }
 
-    private Fruit toFruit(FruitEntity entity) {
-        Fruit fruit = new Fruit();
-        fruit.setColour(entity.getColour());
-        fruit.setKind(entity.getKind());
-        fruit.setSize(entity.getSize());
-        return fruit;
+    private User toUser(UserEntity entity) {
+        User user = new User();
+        user.setUsername(entity.getUsername());
+        user.setFirstName(entity.getFirstName());
+        user.setLastName(entity.getLastName());
+        user.setEmail(entity.getEmail());
+        return user;
     }
 
 }
