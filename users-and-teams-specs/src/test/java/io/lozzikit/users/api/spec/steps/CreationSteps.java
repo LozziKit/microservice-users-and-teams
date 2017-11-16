@@ -3,10 +3,11 @@ package io.lozzikit.users.api.spec.steps;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import io.avalia.fruits.ApiException;
-import io.avalia.fruits.ApiResponse;
-import io.avalia.fruits.api.DefaultApi;
-import io.avalia.fruits.api.dto.Fruit;
+import io.lozzikit.users.ApiException;
+import io.lozzikit.users.ApiResponse;
+import io.lozzikit.users.api.UserApi;
+import io.lozzikit.users.api.dto.NewUser;
+import io.lozzikit.users.api.dto.User;
 import io.lozzikit.users.api.spec.helpers.Environment;
 
 import static org.junit.Assert.assertNotNull;
@@ -18,9 +19,10 @@ import static org.junit.Assert.assertEquals;
 public class CreationSteps {
 
     private Environment environment;
-    private DefaultApi api;
 
-    Fruit fruit;
+    private UserApi api;
+
+    NewUser user;
 
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
@@ -32,20 +34,20 @@ public class CreationSteps {
         this.api = environment.getApi();
     }
 
-    @Given("^there is a Fruits server$")
-    public void there_is_a_Fruits_server() throws Throwable {
+    @Given("^there is a Users server$")
+    public void there_is_a_Users_server() throws Throwable {
         assertNotNull(api);
     }
 
     @Given("^I have a fruit payload$")
     public void i_have_a_fruit_payload() throws Throwable {
-        fruit = new io.avalia.fruits.api.dto.Fruit();
+        user = new io.lozzikit.users.api.dto.NewUser();
     }
 
     @When("^I POST it to the /fruits endpoint$")
     public void i_POST_it_to_the_fruits_endpoint() throws Throwable {
         try {
-            lastApiResponse = api.createFruitWithHttpInfo(fruit);
+            lastApiResponse = api.createUserWithHttpInfo(user);
             lastApiCallThrewException = false;
             lastApiException = null;
             lastStatusCode = lastApiResponse.getStatusCode();
