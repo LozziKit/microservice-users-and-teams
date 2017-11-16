@@ -1,9 +1,10 @@
-package io.avalia.fruits.api.endpoints;
+package io.lozzikit.users.api.endpoints;
 
-import io.avalia.fruits.api.FruitsApi;
-import io.avalia.fruits.entities.FruitEntity;
-import io.avalia.fruits.api.model.Fruit;
-import io.avalia.fruits.repositories.FruitRepository;
+import io.lozzikit.users.api.UsersApi;
+import io.lozzikit.users.entities.FruitEntity;
+import io.lozzikit.users.api.model.User;
+import io.lozzikit.users.api.model.NewUser;
+import io.lozzikit.users.repositories.FruitRepository;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +20,14 @@ import java.util.List;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-26T19:36:34.802Z")
 
 @Controller
-public class FruitsApiController implements FruitsApi {
+public class UsersApiController implements UsersApi {
 
     @Autowired
-    FruitRepository fruitRepository;
+    FruitRepository userRepository;
 
-    public ResponseEntity<Object> createFruit(@ApiParam(value = "", required = true) @Valid @RequestBody Fruit fruit) {
+    public ResponseEntity<Void> createUser(@ApiParam(value = "", required = true) @Valid @RequestBody NewUser user) {
         FruitEntity newFruitEntity = toFruitEntity(fruit);
-        fruitRepository.save(newFruitEntity);
+        userRepository.save(newFruitEntity);
         Long id = newFruitEntity.getId();
 
         URI location = ServletUriComponentsBuilder
@@ -37,7 +38,7 @@ public class FruitsApiController implements FruitsApi {
     }
 
 
-    public ResponseEntity<List<Fruit>> getFruits() {
+    public ResponseEntity<List<String>>  getUsers() {
         List<Fruit> fruits = new ArrayList<>();
         for (FruitEntity fruitEntity : fruitRepository.findAll()) {
             fruits.add(toFruit(fruitEntity));

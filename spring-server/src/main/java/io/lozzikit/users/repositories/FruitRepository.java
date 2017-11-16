@@ -1,6 +1,6 @@
-package io.avalia.fruits.repositories;
+package io.lozzikit.users.repositories;
 
-import io.avalia.fruits.entities.FruitEntity;
+import io.lozzikit.users.entities.FruitEntity;
 import org.springframework.data.repository.CrudRepository;
 
 /**

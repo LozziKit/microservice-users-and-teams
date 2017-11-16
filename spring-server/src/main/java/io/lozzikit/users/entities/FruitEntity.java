@@ -1,4 +1,4 @@
-package io.avalia.fruits.entities;
+package io.lozzikit.users.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
