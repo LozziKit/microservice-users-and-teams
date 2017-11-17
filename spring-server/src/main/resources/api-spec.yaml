@@ -83,6 +83,7 @@ definitions:
     properties:
       username:
         type: string
+        format: email
       firstName:
         type: string
       lastName:
@@ -91,6 +92,13 @@ definitions:
         type: string
       password:
         type: string
+        format: password
+    required:
+      - username
+      - firstName
+      - lastName
+      - email
+      - password
   User:
     type: object
     properties:
@@ -105,3 +113,9 @@ definitions:
         type: string
       email:
         type: string
+    required:
+      - id
+      - username
+      - firstName
+      - lastName
+      - email
