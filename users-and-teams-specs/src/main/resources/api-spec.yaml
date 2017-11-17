@@ -83,14 +83,27 @@ definitions:
     properties:
       username:
         type: string
+        minLength: 4
       firstName:
         type: string
+        minLength: 4
       lastName:
         type: string
+        minLength: 4
       email:
         type: string
+        format: email
+        minLength: 6
       password:
         type: string
+        format: password
+        minLength: 4
+    required:
+      - username
+      - firstName
+      - lastName
+      - email
+      - password
   User:
     type: object
     properties:
@@ -105,3 +118,9 @@ definitions:
         type: string
       email:
         type: string
+    required:
+      - id
+      - username
+      - firstName
+      - lastName
+      - email
