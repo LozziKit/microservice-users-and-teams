@@ -7,6 +7,7 @@ import io.lozzikit.users.api.model.NewUser;
 import io.lozzikit.users.repositories.UserRepository;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,14 +29,18 @@ public class UsersApiController implements UsersApi {
 
     public ResponseEntity<Void> createUser(@ApiParam(value = "", required = true) @Valid @RequestBody NewUser user) {
 
-        UserEntity newUserEntity = toUserEntity(user);
-        userRepository.save(newUserEntity);
+        try{
+            UserEntity newUserEntity = toUserEntity(user);
+            userRepository.save(newUserEntity);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{username}")
-                .buildAndExpand(newUserEntity.getUsername()).toUri();
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest().path("/{username}")
+                    .buildAndExpand(newUserEntity.getUsername()).toUri();
 
-        return ResponseEntity.created(location).build();
+            return ResponseEntity.created(location).build();
+        }catch(DataIntegrityViolationException dive){
+            return ResponseEntity.status(409).build();
+        }
     }
 
     @Override
