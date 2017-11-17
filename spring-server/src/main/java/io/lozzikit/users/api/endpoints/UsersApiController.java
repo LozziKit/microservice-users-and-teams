@@ -66,6 +66,7 @@ public class UsersApiController implements UsersApi {
 
     private User toUser(UserEntity entity) {
         User user = new User();
+        user.setId(entity.getId());
         user.setUsername(entity.getUsername());
         user.setFirstName(entity.getFirstName());
         user.setLastName(entity.getLastName());
