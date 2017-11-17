@@ -1,9 +1,6 @@
 package io.lozzikit.users.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -18,6 +15,7 @@ public class UserEntity implements Serializable {
 
     /*@NotNull
     @Size(min=4)*/
+    @Column(unique = true)
     private String username;
 
     /*@NotNull
@@ -30,6 +28,7 @@ public class UserEntity implements Serializable {
 
     //@NotNull
     //@Size(min=6)
+    @Column(unique = true)
     private String email;
 
     //@NotNull
