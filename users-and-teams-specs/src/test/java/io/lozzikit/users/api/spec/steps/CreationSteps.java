@@ -13,6 +13,7 @@ import io.lozzikit.users.api.spec.helpers.Environment;
 import javax.jws.soap.SOAPBinding;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -21,13 +22,19 @@ import static org.junit.Assert.*;
  */
 public class CreationSteps {
 
+    // Our environment
     private Environment environment;
 
+    // The api to use
     private UserApi api;
 
+    // The list of users from the server
     List<User> users;
+
+    // The user we will be creating
     NewUser user;
 
+    // Utility properties to manage API responses
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
     private boolean lastApiCallThrewException;
@@ -46,9 +53,16 @@ public class CreationSteps {
         assertNotNull(api);
     }
 
-    @Given("^I have a user payload$")
+    @Given("^I have a valid user payload$")
     public void i_have_a_user_payload() throws Throwable {
         assertNotNull(user);
+
+        // Populate the payload to have data to work with
+        user.username(UUID.randomUUID().toString());
+        user.password(UUID.randomUUID().toString().replace("-", ""));
+        user.firstName("John");
+        user.lastName("Rachid");
+        user.email(UUID.randomUUID().toString() + "@test.com");
     }
 
     @Given("^The users list exists$")
@@ -56,19 +70,9 @@ public class CreationSteps {
         assertNotNull(users);
     }
 
-    @Given("^the firstName is not empty$")
-    public void the_firstName_is_not_empty() throws Throwable {
-        user.setFirstName("test");
-    }
-
     @Given("^the firstName is empty$")
     public void the_firstName_is_empty() throws Throwable {
         user.setFirstName(null);
-    }
-
-    @Given("^the lastname is not empty$")
-    public void the_lastname_is_not_empty() throws Throwable {
-        user.setLastName("test");
     }
 
     @Given("^the lastname is empty$")
@@ -76,29 +80,14 @@ public class CreationSteps {
         user.setLastName(null);
     }
 
-    @Given("^the email is not empty$")
-    public void the_email_is_not_empty() throws Throwable {
-        user.setEmail("test@test.com");
-    }
-
     @Given("^the email is empty$")
     public void the_email_is_empty() throws Throwable {
         user.setEmail(null);
     }
 
-    @Given("^the username is not empty$")
-    public void the_username_is_not_empty() throws Throwable {
-        user.setUsername("test");
-    }
-
     @Given("^the username is empty$")
     public void the_username_is_empty() throws Throwable {
         user.setUsername(null);
-    }
-
-    @Given("^the password is not empty$")
-    public void the_password_is_not_empty() throws Throwable {
-        user.setPassword("pass");
     }
 
     @Given("^the password is empty$")
@@ -108,46 +97,53 @@ public class CreationSteps {
 
     @Given("^the username doesn't exists in the database$")
     public void the_username_doesn_t_exists_in_the_database() throws Throwable {
-        User u = new User();
-        u.setFirstName("testUsername");
-        u.setLastName("testUsername");
-        u.setEmail("testUsername@test.com");
-        u.setUsername("testUsername");
-        users.add(u);
+        // We search in the list of users if one exists with the same username
+        boolean doesntExistUsername = true;
+        for (User u : users) {
+            doesntExistUsername = doesntExistUsername
+                    & !u.getUsername().equals(user.getUsername());
+        }
+        assertTrue(doesntExistUsername);
     }
 
     @Given("^the username exists in the database$")
     public void the_username_exists_in_the_database() throws Throwable {
-        User u = new User();
-        u.setFirstName("testUsername");
-        u.setLastName("testUsername");
-        u.setEmail("test2@test.com");
-        u.setUsername("test");
-        users.add(u);
+        // We intentionally create a new user with the same username as the user to create
+        NewUser u = new NewUser();
+        u.setFirstName("Jonathan");
+        u.setLastName("Welson");
+        u.setEmail(UUID.randomUUID().toString().replace("-", "") + "@test.com");
+        u.setUsername(user.getUsername());
+        u.setPassword("password");
+        api.createUserWithHttpInfo(u);
     }
 
     @Given("^the email doesn't exists in the database$")
-    public void the_email_exists_in_the_database() throws Throwable {
-        User u = new User();
-        u.setFirstName("testEmail");
-        u.setLastName("testEmail");
-        u.setEmail("testEmail@test.com");
-        u.setUsername("testEmail");
-        users.add(u);
+    public void the_email_doesn_t_exists_in_the_database() throws Throwable {
+        // We search in the list of users if one exists with the same email
+        boolean doesntExistEmail = true;
+        for (User u : users) {
+            doesntExistEmail = doesntExistEmail
+                    & !u.getUsername().equals(user.getEmail());
+        }
+        assertTrue(doesntExistEmail);
     }
 
     @Given("^the email exists in the database$")
-    public void the_email_exists() throws Throwable {
-        User u = new User();
-        u.setFirstName("testEmail");
-        u.setLastName("testEmail");
-        u.setEmail("test@test.com");
-        u.setUsername("test3");
-        users.add(u);
+    public void the_email_exists_in_the_database() throws Throwable {
+        // We intentionally create a new user with the same email as the user to create
+        NewUser u = new NewUser();
+        u.setFirstName("Jonathan");
+        u.setLastName("Welson");
+        u.setEmail(user.getEmail());
+        u.setUsername(UUID.randomUUID().toString());
+        u.setPassword("password");
+        api.createUserWithHttpInfo(u);
     }
 
     @When("^I POST it to the /users endpoint$")
     public void i_POST_it_to_the_users_endpoint() throws Throwable {
+        // We POST the user to create to the server
         try {
             lastApiResponse = api.createUserWithHttpInfo(user);
             lastApiCallThrewException = false;
@@ -165,6 +161,19 @@ public class CreationSteps {
                 location = headers.get("Location").get(0);
             }
         }
+    }
+
+    @When("^I GET users from the /users endpoint$")
+    public void i_GET_users_from_the_users_endpoint() throws Throwable {
+        // We retrieve the user from the endpoint /users
+        ApiResponse<List<User>> usersResponse = api.getUsersWithHttpInfo();
+        users = usersResponse.getData();
+        lastStatusCode = usersResponse.getStatusCode();
+    }
+
+    @Then("^I've received a list of users$")
+    public void i_ve_received_a_list_of_users() throws Throwable {
+        assertNotNull(users);
     }
 
     @Then("^I receive a (\\d+) status code$")
