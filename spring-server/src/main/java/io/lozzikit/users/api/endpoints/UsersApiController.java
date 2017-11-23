@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,11 @@ public class UsersApiController implements UsersApi {
 
         try{
             UserEntity newUserEntity = toUserEntity(user);
+
+            String password = newUserEntity.getPassword();
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            newUserEntity.setPassword(passwordEncoder.encode(password));
+
             userRepository.save(newUserEntity);
 
             URI location = ServletUriComponentsBuilder
