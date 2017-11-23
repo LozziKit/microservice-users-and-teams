@@ -37,7 +37,7 @@ public class AuthApiController implements AuthApi {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         if(user != null && passwordEncoder.matches(credentials.getPassword(), user.getPassword())){
-            String message = "here is your token!";
+            //TODO Generate a real token (JWT)
             return ResponseEntity.ok(new Token());
         }
         else{
