@@ -2,7 +2,6 @@ package io.lozzikit.users.api.endpoints;
 
 import io.lozzikit.users.api.AuthApi;
 import io.lozzikit.users.api.model.Credentials;
-import io.lozzikit.users.api.model.Token;
 import io.lozzikit.users.entities.UserEntity;
 import io.lozzikit.users.service.UserService;
 import io.swagger.annotations.ApiParam;
@@ -24,16 +23,16 @@ public class AuthApiController implements AuthApi {
     @Autowired
     UserService userService;
 
-    public ResponseEntity<Token> authUser(@ApiParam(value = "", required = true) @Valid @RequestBody Credentials credentials) {
+    public ResponseEntity<Void> authUser(@ApiParam(value = "", required = true) @Valid @RequestBody Credentials credentials) {
         UserEntity user = userService.getUserByUsername(credentials.getUsername());
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         if(user != null && passwordEncoder.matches(credentials.getPassword(), user.getPassword())){
             //TODO Generate a real token (JWT)
-            return ResponseEntity.ok(new Token());
+
+            return ResponseEntity.ok().build();
         }
-        else{
-            return new ResponseEntity<Token>(HttpStatus.UNAUTHORIZED);
-        }
+
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }
