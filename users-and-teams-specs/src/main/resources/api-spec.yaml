@@ -96,9 +96,8 @@ paths:
       responses:
         '200':
           description: successful operation
-          headers:
-            token:
-              type: string
+          schema:
+            $ref: '#/definitions/Token'
         '400':
           description: Bad request
           schema:
@@ -161,4 +160,12 @@ definitions:
       username:
         type: string
       password:
+        type: string
+  Token:
+    type: object
+    properties:
+      validityDate:
+        type: string
+        format: date-time
+      token:
         type: string
