@@ -77,6 +77,36 @@ paths:
             $ref: '#/definitions/User'
         '404':
           description: User not found
+  /auth:
+    post:
+      tags:
+        - user
+      summary: Authenticate a user
+      description: Authenticate a user
+      operationId: authUser
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Created user object
+          required: true
+          schema:
+            $ref: '#/definitions/Credentials'
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            token:
+              type: string
+        '400':
+          description: Bad request
+          schema:
+            type: string
+        '401':
+          description: Bad username or password
+          schema:
+            type: string
 definitions:
   NewUser:
     type: object
@@ -125,3 +155,10 @@ definitions:
       - firstName
       - lastName
       - email
+  Credentials:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
