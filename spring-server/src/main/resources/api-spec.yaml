@@ -97,7 +97,7 @@ paths:
         '201':
           description: successful operation
           headers:
-            Location:
+            Authorization:
               type: string
         '400':
           description: Bad request
