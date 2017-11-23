@@ -8,6 +8,7 @@ import io.lozzikit.users.entities.UserEntity;
 import io.lozzikit.users.api.model.User;
 import io.lozzikit.users.api.model.NewUser;
 import io.lozzikit.users.repositories.UserRepository;
+import io.lozzikit.users.service.UserService;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,10 +31,10 @@ import java.util.List;
 public class AuthApiController implements AuthApi {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     public ResponseEntity<Token> authUser(@ApiParam(value = "", required = true) @Valid @RequestBody Credentials credentials) {
-        UserEntity user = userRepository.findByUsername(credentials.getUsername());
+        UserEntity user = userService.getUserByUsername(credentials.getUsername());
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         if(user != null && passwordEncoder.matches(credentials.getPassword(), user.getPassword())){

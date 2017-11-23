@@ -1,5 +1,6 @@
 package io.lozzikit.users.api.endpoints;
 
+import io.lozzikit.users.utils.DaoDtoConverter;
 import io.lozzikit.users.api.UsersApi;
 import io.lozzikit.users.entities.UserEntity;
 import io.lozzikit.users.api.model.User;
@@ -29,9 +30,11 @@ public class UsersApiController implements UsersApi {
     @Autowired
     UserService userService;
 
+    final DaoDtoConverter daoDtoConverter = new DaoDtoConverter();
+
     public ResponseEntity<Void> createUser(@ApiParam(value = "", required = true) @Valid @RequestBody NewUser user) {
         try{
-            UserEntity newUserEntity = toUserEntity(user);
+            UserEntity newUserEntity = daoDtoConverter.toUserEntity(user);
 
             String password = newUserEntity.getPassword();
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -51,7 +54,7 @@ public class UsersApiController implements UsersApi {
 
     @Override
     public ResponseEntity<User> getUser(@PathVariable("username") String username) {
-        User user = toUser(userService.getUserByUsername(username));
+        User user = daoDtoConverter.toUser(userService.getUserByUsername(username));
         return ResponseEntity.ok(user);
     }
 
@@ -61,29 +64,8 @@ public class UsersApiController implements UsersApi {
         List<User> usersToSend = new ArrayList<>();
         users = userService.getUserList();
         for (UserEntity userEntity : users) {
-            usersToSend.add(toUser(userEntity));
+            usersToSend.add(daoDtoConverter.toUser(userEntity));
         }
         return ResponseEntity.ok(usersToSend);
     }
-
-    private UserEntity toUserEntity(NewUser user) {
-        UserEntity entity = new UserEntity();
-        entity.setUsername(user.getUsername());
-        entity.setFirstName(user.getFirstName());
-        entity.setLastName(user.getLastName());
-        entity.setEmail(user.getEmail());
-        entity.setPassword(user.getPassword());
-        return entity;
-    }
-
-    private User toUser(UserEntity entity) {
-        User user = new User();
-        user.setId(entity.getId());
-        user.setUsername(entity.getUsername());
-        user.setFirstName(entity.getFirstName());
-        user.setLastName(entity.getLastName());
-        user.setEmail(entity.getEmail());
-        return user;
-    }
-
 }
