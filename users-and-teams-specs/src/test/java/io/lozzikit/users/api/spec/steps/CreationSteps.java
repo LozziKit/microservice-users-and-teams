@@ -6,9 +6,12 @@ import cucumber.api.java.en.When;
 import io.lozzikit.users.ApiException;
 import io.lozzikit.users.ApiResponse;
 import io.lozzikit.users.api.UserApi;
+import io.lozzikit.users.api.dto.Credentials;
 import io.lozzikit.users.api.dto.NewUser;
+import io.lozzikit.users.api.dto.Token;
 import io.lozzikit.users.api.dto.User;
 import io.lozzikit.users.api.spec.helpers.Environment;
+//import io.lozzikit.users.api.AuthApi;
 
 import javax.jws.soap.SOAPBinding;
 import java.util.List;
@@ -41,11 +44,20 @@ public class CreationSteps {
     private int lastStatusCode;
     private String location;
 
+    // Credentials
+  //  AuthApi authApi;
+    private Credentials credentials;
+    private String token;
+    private String lastUsername;
+    private String lastPasswrod;
+
     public CreationSteps(Environment environment) throws ApiException {
         this.environment = environment;
         this.api = environment.getApi();
         this.user = new io.lozzikit.users.api.dto.NewUser();
         this.users = api.getUsers();
+        this.credentials = new Credentials();
+        this.token = null;
     }
 
     @Given("^there is a users server$")
@@ -190,4 +202,68 @@ public class CreationSteps {
     public void i_don_t_have_a_link_to_this_user() throws Throwable {
         assertNull(location);
     }
+
+    /*
+    * Partie authentification temporairement ici en attendant de check comment
+    * gérer les dépendances avec un second fichier
+    */
+
+    @Given("^I have a valid credentials payload$")
+    public void i_have_a_valid_credentials_payload() throws Throwable {
+        assertNotNull(user);
+
+        // Populate the payload to have data to work with
+        lastUsername = UUID.randomUUID().toString();
+        lastPasswrod = UUID.randomUUID().toString().replace("-", "");
+        user.username(lastUsername);
+        user.password(lastPasswrod);
+        user.firstName("Jean");
+        user.lastName("Charles");
+        user.email(UUID.randomUUID().toString() + "@test.com");
+
+        credentials.setUsername(lastUsername);
+        credentials.setPassword(lastPasswrod);
+        i_POST_it_to_the_users_endpoint();
+    }
+
+    @When("^I POST it to the /auth endpoint$")
+    public void i_POST_it_to_the_auth_endpoint() throws Throwable {
+        // We POST the user to create to the server
+        try {
+            lastApiResponse = null;// apiAuth.authUser(credentials);
+            lastApiCallThrewException = false;
+            lastApiException = null;
+            lastStatusCode = lastApiResponse.getStatusCode();
+            Map<String, List<String>> headers = lastApiResponse.getHeaders();
+            token = headers.get("token").get(0);
+            throw new ApiException();
+        } catch (ApiException e) {
+            lastApiCallThrewException = true;
+            lastApiException = e;
+            lastStatusCode = lastApiException.getCode();
+            Map<String, List<String>> headers = lastApiException.getResponseHeaders();
+            token = null;
+        }
+    }
+
+    @Then("^I have a token to this user$")
+    public void i_have_a_token_to_this_user() throws Throwable {
+        assertNotNull(token);
+    }
+
+    @Then("^I don't have a token to this user$")
+    public void i_don_t_have_a_token_to_this_user() throws Throwable {
+        assertNull(token);
+    }
+
+    @Given("^the password is bad$")
+    public void the_password_is_bad() throws Throwable {
+        credentials.setPassword("badPassword");
+    }
+
+    @Given("^the username is bad$")
+    public void the_username_is_bad() throws Throwable {
+        credentials.setUsername("badUsername");
+    }
+
 }
