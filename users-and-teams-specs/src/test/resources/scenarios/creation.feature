@@ -77,26 +77,26 @@ Feature: Creation of users
     Then I receive a 400 status code
     And I don't have a link to this user
 
-  Scenario: Create a user and the username already exists in the database
-    Given the firstName is not empty
-    And the lastname is not empty
-    And the email is not empty
-    And the username is not empty
-    And the password is not empty
-    And the username exists in the database
-    And the email doesn't exists in the database
-    When I POST it to the /users endpoint
-    Then I receive a 409 status code
-    And I don't have a link to this user
-
-  Scenario: Create a user and the email already exists in the database
-    Given the firstName is not empty
-    And the lastname is not empty
-    And the email is not empty
-    And the username is not empty
-    And the password is not empty
-    And the username doesn't exists in the database
-    And the email exists in the database
-    When I POST it to the /users endpoint
-    Then I receive a 409 status code
-    And I don't have a link to this user
+#  Scenario: Create a user and the username already exists in the database
+#    Given the firstName is not empty
+#    And the lastname is not empty
+#    And the email is not empty
+#    And the username is not empty
+#    And the password is not empty
+#    And the username exists in the database
+#    And the email doesn't exists in the database
+#    When I POST it to the /users endpoint
+#    Then I receive a 409 status code
+#    And I don't have a link to this user
+#
+#  Scenario: Create a user and the email already exists in the database
+#    Given the firstName is not empty
+#    And the lastname is not empty
+#    And the email is not empty
+#    And the username is not empty
+#    And the password is not empty
+#    And the username doesn't exists in the database
+#    And the email exists in the database
+#    When I POST it to the /users endpoint
+#    Then I receive a 409 status code
+#    And I don't have a link to this user

@@ -4,10 +4,11 @@ import io.lozzikit.users.api.UsersApi;
 import io.lozzikit.users.entities.UserEntity;
 import io.lozzikit.users.api.model.User;
 import io.lozzikit.users.api.model.NewUser;
-import io.lozzikit.users.repositories.UserRepository;
+import io.lozzikit.users.service.UserService;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -26,10 +27,9 @@ import java.util.List;
 public class UsersApiController implements UsersApi {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     public ResponseEntity<Void> createUser(@ApiParam(value = "", required = true) @Valid @RequestBody NewUser user) {
-
         try{
             UserEntity newUserEntity = toUserEntity(user);
 
@@ -37,7 +37,7 @@ public class UsersApiController implements UsersApi {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             newUserEntity.setPassword(passwordEncoder.encode(password));
 
-            userRepository.save(newUserEntity);
+            userService.save(newUserEntity);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{username}")
@@ -45,24 +45,25 @@ public class UsersApiController implements UsersApi {
 
             return ResponseEntity.created(location).build();
         }catch(DataIntegrityViolationException dive){
-            return ResponseEntity.status(409).build();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
     @Override
     public ResponseEntity<User> getUser(@PathVariable("username") String username) {
-        User user = toUser(userRepository.findByUsername(username));
+        User user = toUser(userService.getUserByUsername(username));
         return ResponseEntity.ok(user);
     }
 
     @Override
     public ResponseEntity<List<User>>  getUsers() {
-        List<User> users = new ArrayList<>();
-        for (UserEntity userEntity : userRepository.findAll()) {
-            users.add(toUser(userEntity));
+        List<UserEntity> users = new ArrayList<>();
+        List<User> usersToSend = new ArrayList<>();
+        users = userService.getUserList();
+        for (UserEntity userEntity : users) {
+            usersToSend.add(toUser(userEntity));
         }
-
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(usersToSend);
     }
 
     private UserEntity toUserEntity(NewUser user) {
