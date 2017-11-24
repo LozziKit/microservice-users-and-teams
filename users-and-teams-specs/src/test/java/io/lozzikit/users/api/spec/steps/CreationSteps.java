@@ -5,13 +5,13 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.lozzikit.users.ApiException;
 import io.lozzikit.users.ApiResponse;
+import io.lozzikit.users.api.AuthApi;
 import io.lozzikit.users.api.UserApi;
 import io.lozzikit.users.api.dto.Credentials;
 import io.lozzikit.users.api.dto.NewUser;
 import io.lozzikit.users.api.dto.Token;
 import io.lozzikit.users.api.dto.User;
 import io.lozzikit.users.api.spec.helpers.Environment;
-//import io.lozzikit.users.api.AuthApi;
 
 import javax.jws.soap.SOAPBinding;
 import java.util.List;
@@ -45,9 +45,9 @@ public class CreationSteps {
     private String location;
 
     // Credentials
-  //  AuthApi authApi;
+    private AuthApi authApi;
     private Credentials credentials;
-    private String token;
+    private Token token;
     private String lastUsername;
     private String lastPasswrod;
 
@@ -56,7 +56,7 @@ public class CreationSteps {
         this.api = environment.getApi();
         this.user = new io.lozzikit.users.api.dto.NewUser();
         this.users = api.getUsers();
-        this.credentials = new Credentials();
+        this.credentials = new io.lozzikit.users.api.dto.Credentials();
         this.token = null;
     }
 
@@ -230,13 +230,11 @@ public class CreationSteps {
     public void i_POST_it_to_the_auth_endpoint() throws Throwable {
         // We POST the user to create to the server
         try {
-            lastApiResponse = null;// apiAuth.authUser(credentials);
+            lastApiResponse = api.authUserWithHttpInfo(credentials);
             lastApiCallThrewException = false;
             lastApiException = null;
             lastStatusCode = lastApiResponse.getStatusCode();
-            Map<String, List<String>> headers = lastApiResponse.getHeaders();
-            token = headers.get("token").get(0);
-            throw new ApiException();
+            token = api.authUser(credentials);
         } catch (ApiException e) {
             lastApiCallThrewException = true;
             lastApiException = e;
