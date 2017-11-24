@@ -4,3 +4,5 @@ full-project/
 */target/
 
 *.iml
+
+application.properties
