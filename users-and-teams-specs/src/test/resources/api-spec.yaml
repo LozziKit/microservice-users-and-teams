@@ -80,7 +80,7 @@ paths:
   /auth:
     post:
       tags:
-        - user
+        - auth
       summary: Authenticate a user
       description: Authenticate a user
       operationId: authUser
@@ -89,15 +89,16 @@ paths:
       parameters:
         - in: body
           name: body
-          description: Created user object
+          description: Created auth object
           required: true
           schema:
             $ref: '#/definitions/Credentials'
       responses:
-        '200':
+        '201':
           description: successful operation
-          schema:
-            $ref: '#/definitions/Token'
+          headers:
+            Authorization:
+              type: string
         '400':
           description: Bad request
           schema:
@@ -164,11 +165,3 @@ definitions:
     required:
       - username
       - password
-  Token:
-    type: object
-    properties:
-      validityDate:
-        type: string
-        format: date-time
-      token:
-        type: string
