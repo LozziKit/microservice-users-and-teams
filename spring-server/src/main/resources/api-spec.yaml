@@ -89,7 +89,7 @@ paths:
       parameters:
         - in: body
           name: body
-          description: Created auth object
+          description: Created user object
           required: true
           schema:
             $ref: '#/definitions/Credentials'
@@ -164,4 +164,4 @@ definitions:
         type: string
     required:
       - username
-      - password
+- password

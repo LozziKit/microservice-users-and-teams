@@ -48,13 +48,14 @@ public class CreationSteps {
     private Credentials credentials;
     private String lastUsername;
     private String lastPasswrod;
-    private String token;
+    private Object token;
 
     public CreationSteps(Environment environment) throws ApiException {
         this.environment = environment;
         this.api = environment.getApi();
+        this.authApi =environment.getAuthApi();
         this.user = new io.lozzikit.users.api.dto.NewUser();
-        this.users = api.getUsers();
+  //      this.users = api.getUsers();
         this.credentials = new io.lozzikit.users.api.dto.Credentials();
         this.token = null;
     }
@@ -228,12 +229,13 @@ public class CreationSteps {
     @When("^I POST it to the /auth endpoint$")
     public void i_POST_it_to_the_auth_endpoint() throws Throwable {
         // We POST the user to create to the server
-  /*      try {
-           lastApiResponse = api.authUserWithHttpInfo(credentials);
+       try {
+           lastApiResponse = authApi.authUserWithHttpInfo(credentials);
             lastApiCallThrewException = false;
             lastApiException = null;
             lastStatusCode = lastApiResponse.getStatusCode();
-            token = api.authUser(credentials);
+            Map<String, List<String>> headers = lastApiResponse.getHeaders();
+            token = headers.get("Authorization");
         } catch (ApiException e) {
             lastApiCallThrewException = true;
             lastApiException = e;
@@ -241,7 +243,7 @@ public class CreationSteps {
             Map<String, List<String>> headers = lastApiException.getResponseHeaders();
             token = null;
         }
-        */
+
     }
 
     @Then("^I have a token to this user$")

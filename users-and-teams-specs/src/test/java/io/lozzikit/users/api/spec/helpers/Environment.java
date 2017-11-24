@@ -1,5 +1,6 @@
 package io.lozzikit.users.api.spec.helpers;
 
+import io.lozzikit.users.api.AuthApi;
 import io.lozzikit.users.api.UserApi;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.Properties;
 public class Environment {
 
     private UserApi api = new UserApi();
+    private AuthApi authApi = new AuthApi();
 
     public Environment() throws IOException {
         Properties properties = new Properties();
@@ -26,4 +28,7 @@ public class Environment {
     }
 
 
+    public AuthApi getAuthApi() {
+        return authApi;
+    }
 }
