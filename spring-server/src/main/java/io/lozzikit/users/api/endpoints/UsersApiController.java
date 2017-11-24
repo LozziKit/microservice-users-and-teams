@@ -1,11 +1,11 @@
 package io.lozzikit.users.api.endpoints;
 
-import io.lozzikit.users.utils.DaoDtoConverter;
 import io.lozzikit.users.api.UsersApi;
-import io.lozzikit.users.entities.UserEntity;
-import io.lozzikit.users.api.model.User;
 import io.lozzikit.users.api.model.NewUser;
+import io.lozzikit.users.api.model.User;
+import io.lozzikit.users.entities.UserEntity;
 import io.lozzikit.users.service.UserService;
+import io.lozzikit.users.utils.DaoDtoConverter;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

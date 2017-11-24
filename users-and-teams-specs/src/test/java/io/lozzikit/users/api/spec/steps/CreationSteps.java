@@ -5,13 +5,12 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.lozzikit.users.ApiException;
 import io.lozzikit.users.ApiResponse;
+import io.lozzikit.users.api.AuthApi;
 import io.lozzikit.users.api.UserApi;
 import io.lozzikit.users.api.dto.Credentials;
 import io.lozzikit.users.api.dto.NewUser;
-import io.lozzikit.users.api.dto.Token;
 import io.lozzikit.users.api.dto.User;
 import io.lozzikit.users.api.spec.helpers.Environment;
-//import io.lozzikit.users.api.AuthApi;
 
 import javax.jws.soap.SOAPBinding;
 import java.util.List;
@@ -45,7 +44,7 @@ public class CreationSteps {
     private String location;
 
     // Credentials
-  //  AuthApi authApi;
+    private AuthApi authApi;
     private Credentials credentials;
     private String token;
     private String lastUsername;

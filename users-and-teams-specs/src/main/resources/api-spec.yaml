@@ -80,7 +80,7 @@ paths:
   /auth:
     post:
       tags:
-        - user
+        - auth
       summary: Authenticate a user
       description: Authenticate a user
       operationId: authUser

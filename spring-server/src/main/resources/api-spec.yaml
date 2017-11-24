@@ -80,7 +80,7 @@ paths:
   /auth:
     post:
       tags:
-        - user
+        - auth
       summary: Authenticate a user
       description: Authenticate a user
       operationId: authUser
@@ -89,7 +89,7 @@ paths:
       parameters:
         - in: body
           name: body
-          description: Created user object
+          description: Created auth object
           required: true
           schema:
             $ref: '#/definitions/Credentials'

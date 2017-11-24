@@ -6,6 +6,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+/**
+ * 767 bytes is the stated prefix limitation for InnoDB tables in MySQL version 5.6 (and prior versions). It's
+ * 1,000 bytes long for MyISAM tables. In MySQL version 5.7 and upwards this limit has been increased to 3072 bytes.
+ * So for the unique key to work with all database collation (utf8_genral_ci, utf8mb4_unicode_ci, etc), the maximum
+ * length of those column should be 191 and not 255 for varchar
+ */
 @Entity
 public class UserEntity implements Serializable {
 
@@ -15,7 +21,7 @@ public class UserEntity implements Serializable {
 
     /*@NotNull
     @Size(min=4)*/
-    @Column(unique = true)
+    @Column(unique = true, length = 191)
     private String username;
 
     /*@NotNull
@@ -28,7 +34,7 @@ public class UserEntity implements Serializable {
 
     //@NotNull
     //@Size(min=6)
-    @Column(unique = true)
+    @Column(unique = true, length = 191)
     private String email;
 
     //@NotNull
