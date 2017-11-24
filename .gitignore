@@ -5,4 +5,4 @@ full-project/
 
 *.iml
 
-application.properties
+application-dbLogin.properties
