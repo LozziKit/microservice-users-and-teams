@@ -20,7 +20,8 @@ public class Environment {
         properties.load(this.getClass().getClassLoader().getResourceAsStream("environment.properties"));
         String url = properties.getProperty("io.lozzikit.users.server.url");
         api.getApiClient().setBasePath(url);
-
+        authApi.getApiClient().setBasePath(url);
+        authApi.getApiClient().setBasePath(url);
     }
 
     public UserApi getApi() {

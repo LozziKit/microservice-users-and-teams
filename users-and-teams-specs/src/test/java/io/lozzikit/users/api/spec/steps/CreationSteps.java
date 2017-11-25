@@ -13,6 +13,7 @@ import io.lozzikit.users.api.dto.User;
 import io.lozzikit.users.api.spec.helpers.Environment;
 
 import javax.jws.soap.SOAPBinding;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -36,6 +37,9 @@ public class CreationSteps {
     // The user we will be creating
     NewUser user;
 
+    // Headers
+    private Map<String, List<String>> headers;
+
     // Utility properties to manage API responses
     private ApiResponse lastApiResponse;
     private ApiException lastApiException;
@@ -53,7 +57,7 @@ public class CreationSteps {
     public CreationSteps(Environment environment) throws ApiException {
         this.environment = environment;
         this.api = environment.getApi();
-        this.authApi =environment.getAuthApi();
+        this.authApi = environment.getAuthApi();
         this.user = new io.lozzikit.users.api.dto.NewUser();
   //      this.users = api.getUsers();
         this.credentials = new io.lozzikit.users.api.dto.Credentials();
@@ -178,9 +182,15 @@ public class CreationSteps {
     @When("^I GET users from the /users endpoint$")
     public void i_GET_users_from_the_users_endpoint() throws Throwable {
         // We retrieve the user from the endpoint /users
-        ApiResponse<List<User>> usersResponse = api.getUsersWithHttpInfo();
-        users = usersResponse.getData();
-        lastStatusCode = usersResponse.getStatusCode();
+        try {
+            ApiResponse<List<User>> usersResponse = api.getUsersWithHttpInfo();
+            users = usersResponse.getData();
+            lastStatusCode = usersResponse.getStatusCode();
+        }catch(ApiException e){
+            lastApiCallThrewException = true;
+            lastApiException = e;
+            lastStatusCode = lastApiException.getCode();
+        }
     }
 
     @Then("^I've received a list of users$")
@@ -221,6 +231,7 @@ public class CreationSteps {
         user.lastName("Charles");
         user.email(UUID.randomUUID().toString() + "@test.com");
 
+        // Créer un utilisateurs
         credentials.setUsername(lastUsername);
         credentials.setPassword(lastPasswrod);
         i_POST_it_to_the_users_endpoint();
@@ -230,7 +241,7 @@ public class CreationSteps {
     public void i_POST_it_to_the_auth_endpoint() throws Throwable {
         // We POST the user to create to the server
        try {
-           lastApiResponse = authApi.authUserWithHttpInfo(credentials);
+            lastApiResponse = authApi.authUserWithHttpInfo(credentials);
             lastApiCallThrewException = false;
             lastApiException = null;
             lastStatusCode = lastApiResponse.getStatusCode();
@@ -243,7 +254,6 @@ public class CreationSteps {
             Map<String, List<String>> headers = lastApiException.getResponseHeaders();
             token = null;
         }
-
     }
 
     @Then("^I have a token to this user$")
@@ -256,14 +266,31 @@ public class CreationSteps {
         assertNull(token);
     }
 
-    @Given("^the password is bad$")
-    public void the_password_is_bad() throws Throwable {
-        credentials.setPassword("badPassword");
+    @Given("^the username credentials is empty$")
+    public void the_username_credentials_is_empty() throws Throwable {
+       credentials.setUsername(null);
     }
 
-    @Given("^the username is bad$")
-    public void the_username_is_bad() throws Throwable {
-        credentials.setUsername("badUsername");
+    @Given("^the password credentials is empty$")
+    public void the_password_credentials_is_empty() throws Throwable {
+        credentials.setPassword(null);
     }
 
+
+    @Given("^the username credentials is bad$")
+    public void the_username_credentials_is_bad() throws Throwable {
+        credentials.setUsername("");
+    }
+
+    @Given("^the password credentials is bad$")
+    public void the_password_credentials_is_bad() throws Throwable {
+        credentials.setPassword("");
+    }
+
+    @Given("^I have a valid token payload$")
+    public void i_have_a_valid_token_payload() throws Throwable {
+        i_have_a_valid_credentials_payload();
+        i_POST_it_to_the_auth_endpoint();
+        // set les headers
+    }
 }
