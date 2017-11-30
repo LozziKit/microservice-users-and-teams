@@ -6,7 +6,7 @@ Feature: Authentification of users
 
   Scenario: Authentificate a user with credentials and all is good
     When I POST it to the /auth endpoint
-    Then I receive a 201 status code
+    Then I receive a 200 status code
     And I have a token to this user
 
   Scenario: Authentificate a user with credentials and the username is empty
