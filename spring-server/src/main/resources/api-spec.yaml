@@ -11,6 +11,11 @@ tags:
 schemes:
   - http
   - https
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
 paths:
   /users:
     post:
@@ -41,6 +46,8 @@ paths:
         '409':
           description: Username/email exists already
     get:
+      security:
+        - Bearer: []
       tags:
         - user
       summary: Get users
@@ -57,6 +64,8 @@ paths:
               $ref: '#/definitions/User'
   '/users/{username}':
     get:
+      security:
+        - Bearer: []
       tags:
         - user
       summary: Get user
