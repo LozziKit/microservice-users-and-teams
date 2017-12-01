@@ -31,18 +31,10 @@ public class ApiSteps {
     // Last status code of a request to the API
     private int lastStatusCode;
 
-    // The headers to use with a request
-    private Map<String, List<String>> requestHeaders;
-
-    // The Headers we received from the last API response
-    private Map<String, List<String>> responseHeaders;
-
     // The list of users from the server
     private List<User> apiUserList;
 
     public ApiSteps() {
-        setRequestHeaders(new HashMap<>());
-        setResponseHeaders(new HashMap<>());
         setApiUserList(new LinkedList<>());
     }
 
@@ -107,23 +99,6 @@ public class ApiSteps {
      */
     public void setApiUserList(List<User> apiUserList) {
         this.apiUserList = apiUserList;
-    }
-
-
-    public Map<String, List<String>> getRequestHeaders() {
-        return requestHeaders;
-    }
-
-    public void setRequestHeaders(Map<String, List<String>> requestHeaders) {
-        this.requestHeaders = requestHeaders;
-    }
-
-    public Map<String, List<String>> getResponseHeaders() {
-        return responseHeaders;
-    }
-
-    public void setResponseHeaders(Map<String, List<String>> responseHeaders) {
-        this.responseHeaders = responseHeaders;
     }
 
     /*

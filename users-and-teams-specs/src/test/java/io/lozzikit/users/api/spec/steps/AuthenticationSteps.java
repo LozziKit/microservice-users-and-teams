@@ -5,11 +5,13 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.lozzikit.users.ApiException;
 import io.lozzikit.users.ApiResponse;
+import io.lozzikit.users.Pair;
 import io.lozzikit.users.api.AuthApi;
 import io.lozzikit.users.api.dto.Credentials;
 import io.lozzikit.users.api.dto.NewUser;
 import io.lozzikit.users.api.spec.helpers.Environment;
 import io.lozzikit.users.auth.Authentication;
+import io.lozzikit.users.auth.OAuth;
 
 import java.util.*;
 
@@ -82,7 +84,6 @@ public class AuthenticationSteps {
             lastApiResponse = authApi.authUserWithHttpInfo(credentials);
             apiSteps.setLastApiException(null);
             apiSteps.setLastStatusCode(lastApiResponse.getStatusCode());
-            apiSteps.setResponseHeaders(lastApiResponse.getHeaders());
             token = ((List<String>)lastApiResponse.getHeaders().get("Authorization")).get(0);
         } catch (ApiException e) {
             apiSteps.setLastApiException(e);
@@ -123,14 +124,23 @@ public class AuthenticationSteps {
         credentials.setPassword("");
     }
 
-    @Given("^I have a valid token payload$")
+    @Given("^I have a valid Authorization token$")
     public void i_have_a_valid_token_payload() throws Throwable {
         i_have_a_valid_credentials_payload();
         i_POST_it_to_the_auth_endpoint();
-        // set les headers
 
-        ArrayList<String> headers = new ArrayList<>();
-        headers.add(token);
-        apiSteps.getRequestHeaders().put("Authorization", headers);
+
+        OAuth auth = new OAuth();
+        auth.setAccessToken(token);
+        // set the header for Authorization bearer
+
+        environment.getUserApi().getApiClient().
+        environment.getUserApi().getApiClient().getAuthentications().put("Authorization", au    th);
+        environment.getUserApi().getApiClient().setAccessToken(token);
+    }
+
+    @Given("^I don't have a valid Authorization token$")
+    public void i_don_t_have_a_valid_Authorization_token() throws Throwable {
+
     }
 }

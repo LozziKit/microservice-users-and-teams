@@ -133,27 +133,6 @@ public class CreationSteps {
         }
     }
 
-    @When("^I GET users from the /users endpoint$")
-    public void i_GET_users_from_the_users_endpoint() throws Throwable {
-        // We retrieve the user from the endpoint /users
-        try {
-            Map<String, List<String>> headers = apiSteps.getRequestHeaders();
-            System.out.println(headers.get("Authorization").get(0));
-            userApi.getApiClient().addDefaultHeader("Authorization", headers.get("Authorization").get(0));
-            ApiResponse<List<User>> usersResponse = userApi.getUsersWithHttpInfo();
-            apiSteps.setLastApiException(null);
-            apiSteps.setLastStatusCode(usersResponse.getStatusCode());
-            apiSteps.setApiUserList(usersResponse.getData());
-        }catch(ApiException e){
-            apiSteps.setLastApiException(e);
-        }
-    }
-
-    @Then("^I've received a list of users$")
-    public void i_ve_received_a_list_of_users() throws Throwable {
-        assertNotNull(apiSteps.getApiUserList());
-    }
-
     @Then("^I have a link to this user$")
     public void i_have_a_link_to_this_user() throws Throwable {
         assertNotNull(location);
