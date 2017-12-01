@@ -12,22 +12,19 @@ import java.util.Properties;
  */
 public class Environment {
 
-    private UserApi api = new UserApi();
+    private UserApi userApi = new UserApi();
     private AuthApi authApi = new AuthApi();
 
     public Environment() throws IOException {
         Properties properties = new Properties();
         properties.load(this.getClass().getClassLoader().getResourceAsStream("environment.properties"));
         String url = properties.getProperty("io.lozzikit.users.server.url");
-        api.getApiClient().setBasePath(url);
+        userApi.getApiClient().setBasePath(url);
         authApi.getApiClient().setBasePath(url);
         authApi.getApiClient().setBasePath(url);
     }
 
-    public UserApi getApi() {
-        return api;
-    }
-
+    public UserApi getUserApi() { return userApi; }
 
     public AuthApi getAuthApi() {
         return authApi;
