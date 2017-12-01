@@ -4,13 +4,10 @@ import cucumber.api.java.en.Then;
 import io.lozzikit.users.ApiException;
 import io.lozzikit.users.api.dto.User;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * This ApiSteps class encapsulates the steps that might be use by
