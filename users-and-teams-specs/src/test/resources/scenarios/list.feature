@@ -1,7 +1,7 @@
 Feature: List existing users
 
-    Background:
-        Given there is a users server
+  Background:
+    Given there is a users server
 
     Scenario: List all users and everything is good
         Given I have a valid Authorization token
