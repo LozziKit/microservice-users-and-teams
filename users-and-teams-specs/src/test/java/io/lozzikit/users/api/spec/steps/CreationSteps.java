@@ -5,15 +5,15 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.lozzikit.users.ApiException;
 import io.lozzikit.users.ApiResponse;
+import io.lozzikit.users.api.AuthApi;
 import io.lozzikit.users.api.UserApi;
+import io.lozzikit.users.api.dto.Credentials;
 import io.lozzikit.users.api.dto.NewUser;
 import io.lozzikit.users.api.dto.User;
 import io.lozzikit.users.api.spec.helpers.Environment;
 
 import javax.jws.soap.SOAPBinding;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -25,32 +25,32 @@ public class CreationSteps {
     // Our environment
     private Environment environment;
 
-    // The api to use
-    private UserApi api;
+    // The object to encapsulate the API steps
+    private ApiSteps apiSteps;
 
-    // The list of users from the server
-    List<User> users;
+    // The api to use
+    private UserApi userApi;
 
     // The user we will be creating
     NewUser user;
 
     // Utility properties to manage API responses
     private ApiResponse lastApiResponse;
-    private ApiException lastApiException;
-    private boolean lastApiCallThrewException;
-    private int lastStatusCode;
     private String location;
 
-    public CreationSteps(Environment environment) throws ApiException {
+    public CreationSteps(Environment environment, ApiSteps apiSteps) throws ApiException {
+        // Dependencies injections
         this.environment = environment;
-        this.api = environment.getApi();
+        this.apiSteps = apiSteps;
+
+        // Local utilities
+        this.userApi = environment.getUserApi();
         this.user = new io.lozzikit.users.api.dto.NewUser();
-        this.users = api.getUsers();
     }
 
     @Given("^there is a users server$")
     public void there_is_a_users_server() throws Throwable {
-        assertNotNull(api);
+        assertNotNull(userApi);
     }
 
     @Given("^I have a valid user payload$")
@@ -63,11 +63,6 @@ public class CreationSteps {
         user.firstName("John");
         user.lastName("Rachid");
         user.email(UUID.randomUUID().toString() + "@test.com");
-    }
-
-    @Given("^The users list exists$")
-    public void the_user_list_exists() throws Throwable {
-        assertNotNull(users);
     }
 
     @Given("^the firstName is empty$")
@@ -95,17 +90,6 @@ public class CreationSteps {
         user.setPassword(null);
     }
 
-    @Given("^the username doesn't exists in the database$")
-    public void the_username_doesn_t_exists_in_the_database() throws Throwable {
-        // We search in the list of users if one exists with the same username
-        boolean doesntExistUsername = true;
-        for (User u : users) {
-            doesntExistUsername = doesntExistUsername
-                    & !u.getUsername().equals(user.getUsername());
-        }
-        assertTrue(doesntExistUsername);
-    }
-
     @Given("^the username exists in the database$")
     public void the_username_exists_in_the_database() throws Throwable {
         // We intentionally create a new user with the same username as the user to create
@@ -115,18 +99,7 @@ public class CreationSteps {
         u.setEmail(UUID.randomUUID().toString().replace("-", "") + "@test.com");
         u.setUsername(user.getUsername());
         u.setPassword("password");
-        api.createUserWithHttpInfo(u);
-    }
-
-    @Given("^the email doesn't exists in the database$")
-    public void the_email_doesn_t_exists_in_the_database() throws Throwable {
-        // We search in the list of users if one exists with the same email
-        boolean doesntExistEmail = true;
-        for (User u : users) {
-            doesntExistEmail = doesntExistEmail
-                    & !u.getUsername().equals(user.getEmail());
-        }
-        assertTrue(doesntExistEmail);
+        userApi.createUserWithHttpInfo(u);
     }
 
     @Given("^the email exists in the database$")
@@ -138,47 +111,26 @@ public class CreationSteps {
         u.setEmail(user.getEmail());
         u.setUsername(UUID.randomUUID().toString());
         u.setPassword("password");
-        api.createUserWithHttpInfo(u);
+        userApi.createUserWithHttpInfo(u);
     }
 
     @When("^I POST it to the /users endpoint$")
     public void i_POST_it_to_the_users_endpoint() throws Throwable {
         // We POST the user to create to the server
         try {
-            lastApiResponse = api.createUserWithHttpInfo(user);
-            lastApiCallThrewException = false;
-            lastApiException = null;
-            lastStatusCode = lastApiResponse.getStatusCode();
+            lastApiResponse = userApi.createUserWithHttpInfo(user);
+            apiSteps.setLastApiException(null);
+            apiSteps.setLastStatusCode(lastApiResponse.getStatusCode());
             Map<String, List<String>> headers = lastApiResponse.getHeaders();
             location = headers.get("Location").get(0);
         } catch (ApiException e) {
-            lastApiCallThrewException = true;
-            lastApiException = e;
-            lastStatusCode = lastApiException.getCode();
-            Map<String, List<String>> headers = lastApiException.getResponseHeaders();
+            apiSteps.setLastApiException(e);
+            Map<String, List<String>> headers = e.getResponseHeaders();
             location = null;
             if (headers.get("Location") != null) {
                 location = headers.get("Location").get(0);
             }
         }
-    }
-
-    @When("^I GET users from the /users endpoint$")
-    public void i_GET_users_from_the_users_endpoint() throws Throwable {
-        // We retrieve the user from the endpoint /users
-        ApiResponse<List<User>> usersResponse = api.getUsersWithHttpInfo();
-        users = usersResponse.getData();
-        lastStatusCode = usersResponse.getStatusCode();
-    }
-
-    @Then("^I've received a list of users$")
-    public void i_ve_received_a_list_of_users() throws Throwable {
-        assertNotNull(users);
-    }
-
-    @Then("^I receive a (\\d+) status code$")
-    public void i_receive_a_status_code(int arg1) throws Throwable {
-        assertEquals(arg1, lastStatusCode);
     }
 
     @Then("^I have a link to this user$")

@@ -11,6 +11,11 @@ tags:
 schemes:
   - http
   - https
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
 paths:
   /users:
     post:
@@ -41,6 +46,8 @@ paths:
         '409':
           description: Username/email exists already
     get:
+      security:
+        - Bearer: []
       tags:
         - user
       summary: Get users
@@ -57,6 +64,8 @@ paths:
               $ref: '#/definitions/User'
   '/users/{username}':
     get:
+      security:
+        - Bearer: []
       tags:
         - user
       summary: Get user
@@ -77,6 +86,36 @@ paths:
             $ref: '#/definitions/User'
         '404':
           description: User not found
+  /auth:
+    post:
+      tags:
+        - auth
+      summary: Authenticate a user
+      description: Authenticate a user
+      operationId: authUser
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Created user object
+          required: true
+          schema:
+            $ref: '#/definitions/Credentials'
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            Authorization:
+              type: string
+        '400':
+          description: Bad request
+          schema:
+            type: string
+        '401':
+          description: Unauthorized username or password
+          schema:
+            type: string
 definitions:
   NewUser:
     type: object
@@ -125,3 +164,13 @@ definitions:
       - firstName
       - lastName
       - email
+  Credentials:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+    required:
+      - username
+      - password
