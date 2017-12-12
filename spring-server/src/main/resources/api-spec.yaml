@@ -113,6 +113,8 @@ paths:
           description: Bad request
           schema:
             type: string
+        '409':
+          description: Username/email exists already
   /auth:
     post:
       tags:

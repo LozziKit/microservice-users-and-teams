@@ -93,7 +93,12 @@ public class UsersApiController implements UsersApi {
         if (body.getLastName() != null) {
             userToModify.setLastName(body.getLastName());
         }
-        userService.save(userToModify);
+
+        try {
+            userService.save(userToModify);
+        }catch (DataIntegrityViolationException dive){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
 
         return ResponseEntity.ok().build();
     }
