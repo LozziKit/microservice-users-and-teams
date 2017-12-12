@@ -109,9 +109,6 @@ paths:
       responses:
         '200':
           description: successful operation
-          headers:
-            Location:
-              type: string
         '400':
           description: Bad request
           schema:

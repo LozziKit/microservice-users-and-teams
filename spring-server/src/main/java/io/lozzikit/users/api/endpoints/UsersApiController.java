@@ -80,8 +80,21 @@ public class UsersApiController implements UsersApi {
             userToModify.setUsername(body.getUsername());
         }
         if (body.getPassword() != null) {
-
+            String password = body.getPassword();
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            userToModify.setPassword(passwordEncoder.encode(password));
         }
-        return null;
+        if (body.getEmail() != null) {
+            userToModify.setEmail(body.getEmail());
+        }
+        if (body.getFirstName() != null) {
+            userToModify.setFirstName(body.getFirstName());
+        }
+        if (body.getLastName() != null) {
+            userToModify.setLastName(body.getLastName());
+        }
+        userService.save(userToModify);
+
+        return ResponseEntity.ok().build();
     }
 }
