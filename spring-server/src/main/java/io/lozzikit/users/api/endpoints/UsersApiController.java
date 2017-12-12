@@ -71,7 +71,7 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<Void> updateUser(@ApiParam(value = "Modified user object", required = true) @RequestBody UserModified body) {
+    public ResponseEntity<Void> updateUser(@ApiParam(value = "The name that needs to be fetched", required = true) @PathVariable("username") String username, @ApiParam(value = "Modified user object", required = true) @RequestBody UserModified body) {
         return null;
     }
 }
