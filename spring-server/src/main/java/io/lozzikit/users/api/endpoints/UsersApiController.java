@@ -3,6 +3,7 @@ package io.lozzikit.users.api.endpoints;
 import io.lozzikit.users.api.UsersApi;
 import io.lozzikit.users.api.model.NewUser;
 import io.lozzikit.users.api.model.User;
+import io.lozzikit.users.api.model.UserModified;
 import io.lozzikit.users.entities.UserEntity;
 import io.lozzikit.users.service.UserService;
 import io.lozzikit.users.utils.DaoDtoConverter;
@@ -67,5 +68,10 @@ public class UsersApiController implements UsersApi {
             usersToSend.add(daoDtoConverter.toUser(userEntity));
         }
         return ResponseEntity.ok(usersToSend);
+    }
+
+    @Override
+    public ResponseEntity<Void> updateUser(@ApiParam(value = "Modified user object", required = true) @RequestBody UserModified body) {
+        return null;
     }
 }
