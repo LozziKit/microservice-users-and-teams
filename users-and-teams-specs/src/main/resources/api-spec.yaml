@@ -86,7 +86,7 @@ paths:
             $ref: '#/definitions/User'
         '404':
           description: User not found
-    put:
+    patch:
       tags:
         - user
       summary: Modify user
