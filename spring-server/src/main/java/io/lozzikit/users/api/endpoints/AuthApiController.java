@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -28,9 +27,8 @@ public class AuthApiController extends ApiController implements AuthApi {
 
     public ResponseEntity<String> authUser(@ApiParam(value = "", required = true) @Valid @RequestBody Credentials credentials) {
         UserEntity user = userService.getUserByUsername(credentials.getUsername());
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        if(user != null && passwordEncoder.matches(credentials.getPassword(), user.getPassword())){
+        if(user != null && credentials.getPassword().matches(user.getPassword())){
 
             String JWT = Jwts.builder()
                     .setSubject(credentials.getUsername())
