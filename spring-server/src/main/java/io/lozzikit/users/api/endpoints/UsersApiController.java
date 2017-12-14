@@ -1,6 +1,7 @@
 package io.lozzikit.users.api.endpoints;
 
 import io.lozzikit.users.api.UsersApi;
+import io.lozzikit.users.api.annotation.Authentication;
 import io.lozzikit.users.api.model.NewUser;
 import io.lozzikit.users.api.model.User;
 import io.lozzikit.users.entities.UserEntity;
@@ -24,7 +25,7 @@ import java.util.List;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-26T19:36:34.802Z")
 
 @Controller
-public class UsersApiController extends ApiController implements UsersApi {
+public class UsersApiController implements UsersApi {
 
     @Autowired
     UserService userService;
@@ -50,22 +51,16 @@ public class UsersApiController extends ApiController implements UsersApi {
         }
     }
 
+    @Authentication
     @Override
     public ResponseEntity<User> getUser(@PathVariable("username") String username) {
-
-        if(null == currentUser())
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-
         User user = daoDtoConverter.toUser(userService.getUserByUsername(username));
         return ResponseEntity.ok(user);
     }
 
+    @Authentication
     @Override
     public ResponseEntity<List<User>>  getUsers() {
-
-        if(null == currentUser())
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-
         List<UserEntity> users = new ArrayList<>();
         List<User> usersToSend = new ArrayList<>();
         users = userService.getUserList();

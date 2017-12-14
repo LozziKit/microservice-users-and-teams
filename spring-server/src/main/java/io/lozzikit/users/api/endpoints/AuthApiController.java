@@ -20,7 +20,7 @@ import java.util.Date;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2017-07-26T19:36:34.802Z")
 
 @Controller
-public class AuthApiController extends ApiController implements AuthApi {
+public class AuthApiController implements AuthApi {
 
     @Autowired
     UserService userService;
