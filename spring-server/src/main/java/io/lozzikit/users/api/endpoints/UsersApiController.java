@@ -68,6 +68,7 @@ public class UsersApiController implements UsersApi {
         return ResponseEntity.ok(usersToSend);
     }
 
+    @Authentication
     @Override
     public ResponseEntity<Void> updateUser(@ApiParam(value = "The name that needs to be fetched", required = true) @PathVariable("username") String username, @ApiParam(value = "Modified user object", required = true) @Valid @RequestBody UserModified body) {
         UserEntity ue = userService.getUserByUsername(username);
