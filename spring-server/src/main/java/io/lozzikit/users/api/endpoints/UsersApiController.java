@@ -57,7 +57,7 @@ public class UsersApiController implements UsersApi {
         if (ue == null) {
             return ResponseEntity.notFound().build();
         }
-        
+
         User user = daoDtoConverter.toUser(ue);
         return ResponseEntity.ok(user);
     }
