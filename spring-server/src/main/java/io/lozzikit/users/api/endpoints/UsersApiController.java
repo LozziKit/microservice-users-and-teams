@@ -36,9 +36,6 @@ public class UsersApiController implements UsersApi {
         try{
             UserEntity newUserEntity = daoDtoConverter.toUserEntity(user);
 
-            String password = newUserEntity.getPassword();
-            newUserEntity.setPassword(password);
-
             userService.save(newUserEntity);
 
             URI location = ServletUriComponentsBuilder

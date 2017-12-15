@@ -1,5 +1,7 @@
 package io.lozzikit.users.api.endpoints;
 
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.lozzikit.users.api.AuthApi;
@@ -28,7 +30,7 @@ public class AuthApiController implements AuthApi {
     public ResponseEntity<String> authUser(@ApiParam(value = "", required = true) @Valid @RequestBody Credentials credentials) {
         UserEntity user = userService.getUserByUsername(credentials.getUsername());
 
-        if(user != null && credentials.getPassword().matches(user.getPassword())){
+        if(user != null && Argon2Factory.create().verify(user.getPassword(), credentials.getPassword())){
 
             String JWT = Jwts.builder()
                     .setSubject(credentials.getUsername())
