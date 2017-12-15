@@ -41,6 +41,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.POST, AUTH_USER_URL).permitAll()
             .antMatchers(HttpMethod.POST, CREATE_USER_URL).permitAll()
             .antMatchers(HttpMethod.GET, "/").permitAll()
+            .antMatchers(HttpMethod.GET, "/health").permitAll()
             .anyRequest().authenticated()
         .and()
             .sessionManagement()
