@@ -6,8 +6,11 @@
 
 Having a microservice able to register and authenticate users is good, being able to authenticate 
 said users in your own application is better. The lozzikit team thought of everything and 
-offers you the Users SDK project, the tools to authenticate users created using the 
+offers you the Users SDK project: the tool to authenticate users created using the 
 **microservice-users-and-teams** microservice. 
+
+You can use this tool to authenticate users in your own Spring applications using as little code as 
+simple annotations on your endpoints. How cool is that ?
 
 ## Maven dependency
 
@@ -33,7 +36,7 @@ repository in your pom.xml:
 </repositories>
 ``` 
 
-There, You're ready to use the SDK !
+There, you're ready to use the SDK !
 
 ## Use the SDK in your project
 
