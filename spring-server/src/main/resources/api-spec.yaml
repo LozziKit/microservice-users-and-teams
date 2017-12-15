@@ -86,6 +86,35 @@ paths:
             $ref: '#/definitions/User'
         '404':
           description: User not found
+    put:
+      tags:
+        - user
+      summary: Modify user
+      description: Modify an existing user
+      operationId: updateUser
+      produces:
+        - application/json
+      parameters:
+        - name: username
+          in: path
+          description: 'The name that needs to be fetched'
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Modified user object
+          required: true
+          schema:
+            $ref: '#/definitions/UserModified'
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request
+          schema:
+            type: string
+        '409':
+          description: Username/email exists already
   /auth:
     post:
       tags:
@@ -163,6 +192,28 @@ definitions:
       - firstName
       - lastName
       - email
+  UserModified:
+    type: object
+    properties:
+      firstName:
+        type: string
+        minLength: 4
+      lastName:
+        type: string
+        minLength: 4
+      email:
+        type: string
+        pattern: '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+        minLength: 6
+      password:
+        type: string
+        format: password
+        minLength: 4
+    required:
+      - firstName
+      - lastName
+      - email
+      - password
   Credentials:
     type: object
     properties:

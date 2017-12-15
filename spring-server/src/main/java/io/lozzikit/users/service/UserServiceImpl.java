@@ -1,5 +1,6 @@
 package io.lozzikit.users.service;
 
+import io.lozzikit.users.api.model.UserModified;
 import io.lozzikit.users.entities.UserEntity;
 import io.lozzikit.users.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

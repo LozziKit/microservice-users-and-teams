@@ -4,6 +4,7 @@ import io.lozzikit.users.api.UsersApi;
 import io.lozzikit.users.api.annotation.Authentication;
 import io.lozzikit.users.api.model.NewUser;
 import io.lozzikit.users.api.model.User;
+import io.lozzikit.users.api.model.UserModified;
 import io.lozzikit.users.entities.UserEntity;
 import io.lozzikit.users.service.UserService;
 import io.lozzikit.users.utils.DaoDtoConverter;
@@ -65,5 +66,26 @@ public class UsersApiController implements UsersApi {
             usersToSend.add(daoDtoConverter.toUser(userEntity));
         }
         return ResponseEntity.ok(usersToSend);
+    }
+
+    @Override
+    public ResponseEntity<Void> updateUser(@ApiParam(value = "The name that needs to be fetched", required = true) @PathVariable("username") String username, @ApiParam(value = "Modified user object", required = true) @Valid @RequestBody UserModified body) {
+        UserEntity ue = userService.getUserByUsername(username);
+        if (ue == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        ue.setPassword(body.getPassword());
+        ue.setFirstName(body.getFirstName());
+        ue.setLastName(body.getLastName());
+        ue.setEmail(body.getEmail());
+
+        try {
+            userService.save(ue);
+        }catch (DataIntegrityViolationException dive){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        return ResponseEntity.ok().build();
     }
 }
