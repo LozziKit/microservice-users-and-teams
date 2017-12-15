@@ -52,7 +52,13 @@ public class UsersApiController implements UsersApi {
     @Authentication
     @Override
     public ResponseEntity<User> getUser(@PathVariable("username") String username) {
-        User user = daoDtoConverter.toUser(userService.getUserByUsername(username));
+        UserEntity ue = userService.getUserByUsername(username);
+
+        if (ue == null) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        User user = daoDtoConverter.toUser(ue);
         return ResponseEntity.ok(user);
     }
 
