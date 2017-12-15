@@ -28,7 +28,12 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             // Get token from request
             String token = request.getHeader(SecurityConstants.HEADER_STRING);
 
-            if (token != null) {
+            if (null == token) {
+                response.setStatus(401);
+                return false;
+            }
+
+            try {
                 // parse the token.
                 String user = Jwts.parser()
                         .setSigningKey(SecurityConstants.SECRET)
@@ -44,7 +49,9 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     return false;
                 }
             }
-            else {
+            catch(Exception e) {
+
+                //  Return 401 for any exceptions (This include ExpiredJwtException, MalformedJwtException, ...)
                 response.setStatus(401);
                 return false;
             }
