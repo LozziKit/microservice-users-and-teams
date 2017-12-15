@@ -1,6 +1,7 @@
 package io.lozzikit.users.api.endpoints;
 
 import io.lozzikit.users.api.UsersApi;
+import io.lozzikit.users.api.annotation.Authentication;
 import io.lozzikit.users.api.model.NewUser;
 import io.lozzikit.users.api.model.User;
 import io.lozzikit.users.entities.UserEntity;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,10 +36,6 @@ public class UsersApiController implements UsersApi {
         try{
             UserEntity newUserEntity = daoDtoConverter.toUserEntity(user);
 
-            String password = newUserEntity.getPassword();
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            newUserEntity.setPassword(passwordEncoder.encode(password));
-
             userService.save(newUserEntity);
 
             URI location = ServletUriComponentsBuilder
@@ -52,12 +48,14 @@ public class UsersApiController implements UsersApi {
         }
     }
 
+    @Authentication
     @Override
     public ResponseEntity<User> getUser(@PathVariable("username") String username) {
         User user = daoDtoConverter.toUser(userService.getUserByUsername(username));
         return ResponseEntity.ok(user);
     }
 
+    @Authentication
     @Override
     public ResponseEntity<List<User>>  getUsers() {
         List<UserEntity> users = new ArrayList<>();

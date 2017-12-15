@@ -104,10 +104,9 @@ paths:
             $ref: '#/definitions/Credentials'
       responses:
         '200':
-          description: successful operation
-          headers:
-            Authorization:
-              type: string
+          description: successful operation (Get JWT token)
+          schema:
+            type: string
         '400':
           description: Bad request
           schema:
