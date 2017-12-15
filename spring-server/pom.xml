@@ -84,6 +84,12 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>io.lozzikit</groupId>
+            <artifactId>user-sdk</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-devtools</artifactId>

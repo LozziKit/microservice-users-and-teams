@@ -13,5 +13,6 @@
         <module>spring-server</module>
         <module>users-and-teams-specs</module>
         <module>database</module>
+        <module>user-sdk</module>
     </modules>
 </project>

@@ -1,7 +1,7 @@
 package io.lozzikit.users.api.endpoints;
 
 import io.lozzikit.users.api.UsersApi;
-import io.lozzikit.users.api.annotation.Authentication;
+import io.lozzikit.sdk.annotation.Authentication;
 import io.lozzikit.users.api.model.NewUser;
 import io.lozzikit.users.api.model.User;
 import io.lozzikit.users.api.model.UserModified;

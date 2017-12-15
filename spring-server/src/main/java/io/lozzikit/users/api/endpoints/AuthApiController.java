@@ -5,7 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.lozzikit.users.api.AuthApi;
 import io.lozzikit.users.api.model.Credentials;
-import io.lozzikit.users.api.security.SecurityConstants;
+import io.lozzikit.sdk.security.SecurityConstants;
 import io.lozzikit.users.entities.UserEntity;
 import io.lozzikit.users.service.UserService;
 import io.swagger.annotations.ApiParam;
