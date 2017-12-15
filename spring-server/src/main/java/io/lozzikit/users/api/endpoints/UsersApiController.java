@@ -72,30 +72,18 @@ public class UsersApiController implements UsersApi {
 
     @Override
     public ResponseEntity<Void> updateUser(@ApiParam(value = "The name that needs to be fetched", required = true) @PathVariable("username") String username, @ApiParam(value = "Modified user object", required = true) @Valid @RequestBody UserModified body) {
-        UserEntity userToModify = userService.getUserByUsername(username);
-        if (userToModify == null) {
+        UserEntity ue = userService.getUserByUsername(username);
+        if (ue == null) {
             return ResponseEntity.notFound().build();
         }
-        if (body.getUsername() != null){
-            userToModify.setUsername(body.getUsername());
-        }
-        if (body.getPassword() != null) {
-            String password = body.getPassword();
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            userToModify.setPassword(passwordEncoder.encode(password));
-        }
-        if (body.getEmail() != null) {
-            userToModify.setEmail(body.getEmail());
-        }
-        if (body.getFirstName() != null) {
-            userToModify.setFirstName(body.getFirstName());
-        }
-        if (body.getLastName() != null) {
-            userToModify.setLastName(body.getLastName());
-        }
+
+        ue.setPassword(body.getPassword());
+        ue.setFirstName(body.getFirstName());
+        ue.setLastName(body.getLastName());
+        ue.setEmail(body.getEmail());
 
         try {
-            userService.save(userToModify);
+            userService.save(ue);
         }catch (DataIntegrityViolationException dive){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }

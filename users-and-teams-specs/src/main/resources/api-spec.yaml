@@ -86,7 +86,7 @@ paths:
             $ref: '#/definitions/User'
         '404':
           description: User not found
-    patch:
+    put:
       tags:
         - user
       summary: Modify user
@@ -196,9 +196,6 @@ definitions:
   UserModified:
     type: object
     properties:
-      username:
-        type: string
-        minLength: 4
       firstName:
         type: string
         minLength: 4
@@ -213,6 +210,11 @@ definitions:
         type: string
         format: password
         minLength: 4
+    required:
+      - firstName
+      - lastName
+      - email
+      - password
   Credentials:
     type: object
     properties:
