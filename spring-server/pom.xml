@@ -86,7 +86,7 @@
     <dependencies>
         <dependency>
             <groupId>io.lozzikit</groupId>
-            <artifactId>user-sdk</artifactId>
+            <artifactId>users-sdk</artifactId>
             <version>0.0.1</version>
             <scope>compile</scope>
         </dependency>
