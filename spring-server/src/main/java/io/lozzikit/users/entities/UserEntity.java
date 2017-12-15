@@ -1,5 +1,8 @@
 package io.lozzikit.users.entities;
 
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -81,11 +84,9 @@ public class UserEntity implements Serializable {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = Argon2Factory.create().hash(2, 256, 1, password);
     }
 }

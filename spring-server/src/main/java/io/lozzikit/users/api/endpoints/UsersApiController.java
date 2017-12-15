@@ -1,6 +1,7 @@
 package io.lozzikit.users.api.endpoints;
 
 import io.lozzikit.users.api.UsersApi;
+import io.lozzikit.users.api.annotation.Authentication;
 import io.lozzikit.users.api.model.NewUser;
 import io.lozzikit.users.api.model.User;
 import io.lozzikit.users.api.model.UserModified;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,10 +37,6 @@ public class UsersApiController implements UsersApi {
         try{
             UserEntity newUserEntity = daoDtoConverter.toUserEntity(user);
 
-            String password = newUserEntity.getPassword();
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            newUserEntity.setPassword(passwordEncoder.encode(password));
-
             userService.save(newUserEntity);
 
             URI location = ServletUriComponentsBuilder
@@ -53,12 +49,20 @@ public class UsersApiController implements UsersApi {
         }
     }
 
+    @Authentication
     @Override
     public ResponseEntity<User> getUser(@PathVariable("username") String username) {
-        User user = daoDtoConverter.toUser(userService.getUserByUsername(username));
+        UserEntity ue = userService.getUserByUsername(username);
+
+        if (ue == null) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        User user = daoDtoConverter.toUser(ue);
         return ResponseEntity.ok(user);
     }
 
+    @Authentication
     @Override
     public ResponseEntity<List<User>>  getUsers() {
         List<UserEntity> users = new ArrayList<>();
@@ -70,32 +74,21 @@ public class UsersApiController implements UsersApi {
         return ResponseEntity.ok(usersToSend);
     }
 
+    @Authentication
     @Override
     public ResponseEntity<Void> updateUser(@ApiParam(value = "The name that needs to be fetched", required = true) @PathVariable("username") String username, @ApiParam(value = "Modified user object", required = true) @Valid @RequestBody UserModified body) {
-        UserEntity userToModify = userService.getUserByUsername(username);
-        if (userToModify == null) {
+        UserEntity ue = userService.getUserByUsername(username);
+        if (ue == null) {
             return ResponseEntity.notFound().build();
         }
-        if (body.getUsername() != null){
-            userToModify.setUsername(body.getUsername());
-        }
-        if (body.getPassword() != null) {
-            String password = body.getPassword();
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            userToModify.setPassword(passwordEncoder.encode(password));
-        }
-        if (body.getEmail() != null) {
-            userToModify.setEmail(body.getEmail());
-        }
-        if (body.getFirstName() != null) {
-            userToModify.setFirstName(body.getFirstName());
-        }
-        if (body.getLastName() != null) {
-            userToModify.setLastName(body.getLastName());
-        }
+
+        ue.setPassword(body.getPassword());
+        ue.setFirstName(body.getFirstName());
+        ue.setLastName(body.getLastName());
+        ue.setEmail(body.getEmail());
 
         try {
-            userService.save(userToModify);
+            userService.save(ue);
         }catch (DataIntegrityViolationException dive){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }

@@ -86,7 +86,7 @@ paths:
             $ref: '#/definitions/User'
         '404':
           description: User not found
-    patch:
+    put:
       tags:
         - user
       summary: Modify user
@@ -133,10 +133,9 @@ paths:
             $ref: '#/definitions/Credentials'
       responses:
         '200':
-          description: successful operation
-          headers:
-            Authorization:
-              type: string
+          description: successful operation (Get JWT token)
+          schema:
+            type: string
         '400':
           description: Bad request
           schema:
@@ -196,9 +195,6 @@ definitions:
   UserModified:
     type: object
     properties:
-      username:
-        type: string
-        minLength: 4
       firstName:
         type: string
         minLength: 4
@@ -213,6 +209,11 @@ definitions:
         type: string
         format: password
         minLength: 4
+    required:
+      - firstName
+      - lastName
+      - email
+      - password
   Credentials:
     type: object
     properties:
