@@ -1,6 +1,5 @@
 package io.lozzikit.users.api.endpoints;
 
-import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
