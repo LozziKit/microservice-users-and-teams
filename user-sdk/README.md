@@ -77,7 +77,8 @@ the **microservice-users-and-teams** microservice, you can retrieve the username
 endpoint using :
 
 ```
-// TODO
+    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    String username = (String) request.getAttribute("user");
 ```
 
 
