@@ -1,4 +1,4 @@
-FROM java:openjdk-8-jre
+FROM maven:3.5.2-jdk-8-alpine
 
 LABEL MAINTAINER "Daniel Palumbo <daniel.palumbo@heig-vd.ch>"
 LABEL MAINTAINER "Mathieu Monteverde <mathieu.monteverde@heig-vd.ch>"
@@ -6,8 +6,7 @@ LABEL MAINTAINER "Sathiya Kirushnapillai<sathiya.kirushnapillai@heig-vd.ch>"
 LABEL MAINTAINER "Michela Zucca<michela.zucca@heig-vd.ch>"
 LABEL MAINTAINER "Adrian Dipietro<adrian.dipietro@heig-vd.ch>"
 
-COPY server/server.jar users-and-teams/server.jar
-COPY tests/ users-and-teams/users-and-teams-specs/
+COPY server.jar users-and-teams/server.jar
 
 EXPOSE 5005
 
