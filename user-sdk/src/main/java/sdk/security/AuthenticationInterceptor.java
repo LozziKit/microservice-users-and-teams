@@ -1,11 +1,13 @@
-package io.lozzikit.users.api.security;
+package io.lozzikit.sdk.security;
 
 import io.jsonwebtoken.Jwts;
 
-import io.lozzikit.users.api.annotation.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import io.lozzikit.sdk.annotation.Authentication;
+import io.lozzikit.sdk.security.SecurityConstants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

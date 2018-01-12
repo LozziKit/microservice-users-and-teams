@@ -1,4 +1,4 @@
-package io.lozzikit.users.api.annotation;
+package io.lozzikit.sdk.annotation;
 
 
 

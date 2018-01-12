@@ -1,9 +1,10 @@
-package io.lozzikit.users.configuration;
+package io.lozzikit.sdk.configuration;
 
-import io.lozzikit.users.api.security.AuthenticationInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
+
+import io.lozzikit.sdk.security.AuthenticationInterceptor;
 
 
 @Configuration

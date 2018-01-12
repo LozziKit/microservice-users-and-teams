@@ -1,4 +1,4 @@
-package io.lozzikit.users.api.security;
+package io.lozzikit.sdk.security;
 
 public class SecurityConstants {
     public static final String SECRET = "PasImprimanteLouperSYM";
