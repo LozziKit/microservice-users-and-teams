@@ -2,32 +2,33 @@ version: '2.1'
 
 services:
   database:
-    image: "microservice-users-and-teams/database"
+    image: "lozzikit/users-and-teams/database"
+    container_name: "lozzikit-users-and-teams-database"
     environment:
       - MYSQL_DATABASE=lozzikitUsers
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
+      - MYSQL_USER=lozzikit
+      - MYSQL_PASSWORD=lozzikit
       - MYSQL_ROOT_PASSWORD=root
     ports:
       - 3308:3306
     healthcheck:
-      test: ["CMD", "mysql", "--user=root", "--password=root", "--execute=SHOW DATABASES;"]
+      test: ["CMD", "mysql", "--user=lozzikit", "--password=lozzikit", "--execute=SHOW DATABASES;"]
       interval: 10s
       retries: 3
   server:
-    image: microservice-users-and-teams/server
+    image: "lozzikit/users-and-teams/server"
+    links:
+          - database:database
+    container_name: "lozzikit-users-and-teams-server"
     ports:
       - 8080:8080
       - 5005:5005
     environment:
       - DATABASE_HOST=database
-      - DATABASE_USER=root
-      - DATABASE_PASSWORD=root
+      - DATABASE_USER=lozzikit
+      - DATABASE_PASSWORD=lozzikit
       - DATABASE_NAME=lozzikitUsers
       - DATABASE_PORT=3306
-    depends_on:
-      database:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-sSfk", "http://localhost:8080/api/health"]
       interval: 10s

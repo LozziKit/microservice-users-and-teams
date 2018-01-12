@@ -6,6 +6,9 @@ LABEL MAINTAINER "Sathiya Kirushnapillai<sathiya.kirushnapillai@heig-vd.ch>"
 LABEL MAINTAINER "Michela Zucca<michela.zucca@heig-vd.ch>"
 LABEL MAINTAINER "Adrian Dipietro<adrian.dipietro@heig-vd.ch>"
 
+RUN apt-get update
+RUN apt-get install -y maven
+
 COPY target/microservice-users-and-teams-server-1.0.0.jar server.jar
 
 EXPOSE 5005
