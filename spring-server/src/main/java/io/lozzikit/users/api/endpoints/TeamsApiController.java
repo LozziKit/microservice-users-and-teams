@@ -1,5 +1,6 @@
 package io.lozzikit.users.api.endpoints;
 
+import io.lozzikit.sdk.annotation.Authentication;
 import io.lozzikit.users.api.TeamsApi;
 import io.lozzikit.users.api.model.NewTeam;
 import io.lozzikit.users.api.model.Team;
@@ -45,6 +46,7 @@ public class TeamsApiController implements TeamsApi {
     @Autowired
     private UserTeamRepository userTeamRepository;
 
+    @Authentication
     @Override
     public ResponseEntity<Void> createTeam(@ApiParam(value = "Created team object", required = true) @RequestBody NewTeam body) {
         try{
@@ -77,6 +79,7 @@ public class TeamsApiController implements TeamsApi {
         }
     }
 
+    @Authentication
     @Override
     public ResponseEntity<Team> getTeam(@ApiParam(value = "The id of the team", required = true) @PathVariable("id") Long id) {
         TeamEntity te = teamService.getTeamById(id);
@@ -89,6 +92,7 @@ public class TeamsApiController implements TeamsApi {
         return ResponseEntity.ok(daoDtoConverter.toTeam(te));
     }
 
+    @Authentication
     @Override
     public ResponseEntity<List<Team>> getTeams() {
         List<TeamEntity> teams = new ArrayList<>();
@@ -100,6 +104,7 @@ public class TeamsApiController implements TeamsApi {
         return ResponseEntity.ok(teamsToSend);
     }
 
+    @Authentication
     @Override
     public ResponseEntity<Void> updateTeam(@ApiParam(value = "The id of the team that needs to be fetched", required = true) @PathVariable("id") Long id, @ApiParam(value = "Modified team object", required = true) @RequestBody Team body) {
         TeamEntity te = teamService.getTeamById(id);

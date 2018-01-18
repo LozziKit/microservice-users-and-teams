@@ -51,6 +51,7 @@ public class UsersApiController implements UsersApi {
         }
     }
 
+    @Authentication
     @Override
     public ResponseEntity<List<Team>> getTeamsByUser(@ApiParam(value = "The name that needs to be fetched. Use user1 for testing. ", required = true) @PathVariable("username") String username) {
         UserEntity ue = userService.getUserByUsername(username);
@@ -80,7 +81,7 @@ public class UsersApiController implements UsersApi {
         return ResponseEntity.ok(user);
     }
 
-    //@Authentication
+    @Authentication
     @Override
     public ResponseEntity<List<User>>  getUsers() {
         List<UserEntity> users = new ArrayList<>();
