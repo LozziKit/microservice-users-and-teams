@@ -4,5 +4,7 @@ full-project/
 */target/
 
 *.iml
+*.jar
+images/tests/users-and-teams-specs/
 
 application-dbLogin.properties
