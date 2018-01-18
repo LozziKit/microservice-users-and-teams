@@ -17,7 +17,7 @@ public class TeamEntity implements Serializable {
     @Column(unique = true, length = 191, nullable = false)
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "primaryKey.team")
+    @OneToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY, mappedBy = "primaryKey.team")
     private Set<UserTeamEntity> members = new HashSet<>();
 
     public long getId() {

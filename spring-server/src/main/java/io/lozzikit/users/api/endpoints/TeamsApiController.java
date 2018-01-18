@@ -111,6 +111,16 @@ public class TeamsApiController implements TeamsApi {
 
         te.setName(body.getName());
 
+        try {
+            teamService.save(te);
+        }catch (DataIntegrityViolationException dive){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        for(UserTeamEntity ute : te.getMembers()) {
+            userTeamRepository.delete(ute);
+        }
+
         for(User u : body.getMembers()) {
             UserTeamEntity ute = new UserTeamEntity();
             UserEntity ue = userService.getUserByUsername(u.getUsername());
@@ -123,12 +133,7 @@ public class TeamsApiController implements TeamsApi {
         }
 
         te.setMembers(members);
-
-        try {
-            teamService.save(te);
-        }catch (DataIntegrityViolationException dive){
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+        teamService.save(te);
 
         return ResponseEntity.ok().build();
     }

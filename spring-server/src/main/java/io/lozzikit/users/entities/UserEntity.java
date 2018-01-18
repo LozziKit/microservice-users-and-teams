@@ -24,26 +24,16 @@ public class UserEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    /*@NotNull
-    @Size(min=4)*/
     @Column(unique = true, length = 191)
     private String username;
 
-    /*@NotNull
-    @Size(min=2)*/
     private String firstName;
 
-    //@NotNull
-    //@Size(min=2)
     private String lastName;
 
-    //@NotNull
-    //@Size(min=6)
     @Column(unique = true, length = 191)
     private String email;
 
-    //@NotNull
-    //@Size(min=6)
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "primaryKey.user")
