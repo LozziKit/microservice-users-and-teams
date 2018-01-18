@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface UserTeamRepository extends JpaRepository<UserTeamEntity, Long> {
 
-    UserTeamEntity findById(Long id);
-
     @Override
     List<UserTeamEntity> findAll();
 

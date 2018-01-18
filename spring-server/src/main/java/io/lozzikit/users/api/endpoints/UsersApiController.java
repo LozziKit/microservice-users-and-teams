@@ -7,6 +7,7 @@ import io.lozzikit.users.api.model.Team;
 import io.lozzikit.users.api.model.User;
 import io.lozzikit.users.api.model.UserModified;
 import io.lozzikit.users.entities.UserEntity;
+import io.lozzikit.users.entities.UserTeamEntity;
 import io.lozzikit.users.service.UserService;
 import io.lozzikit.users.utils.DaoDtoConverter;
 import io.swagger.annotations.ApiParam;
@@ -52,7 +53,18 @@ public class UsersApiController implements UsersApi {
 
     @Override
     public ResponseEntity<List<Team>> getTeamsByUser(@ApiParam(value = "The name that needs to be fetched. Use user1 for testing. ", required = true) @PathVariable("username") String username) {
-        return null;
+        UserEntity ue = userService.getUserByUsername(username);
+
+        if (ue == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<Team> teams = new ArrayList<>();
+        for(UserTeamEntity ute : ue.getTeams()) {
+            teams.add(daoDtoConverter.toTeam(ute.getTeam()));
+        }
+
+        return ResponseEntity.ok(teams);
     }
 
     @Authentication
@@ -68,7 +80,7 @@ public class UsersApiController implements UsersApi {
         return ResponseEntity.ok(user);
     }
 
-    @Authentication
+    //@Authentication
     @Override
     public ResponseEntity<List<User>>  getUsers() {
         List<UserEntity> users = new ArrayList<>();

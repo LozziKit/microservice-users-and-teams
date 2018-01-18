@@ -6,7 +6,11 @@ import io.lozzikit.users.api.model.Team;
 import io.lozzikit.users.api.model.User;
 import io.lozzikit.users.entities.TeamEntity;
 import io.lozzikit.users.entities.UserEntity;
+import io.lozzikit.users.entities.UserTeamEntity;
 import org.modelmapper.ModelMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DaoDtoConverter {
 
@@ -28,10 +32,21 @@ public class DaoDtoConverter {
         return modelMapper.map(entity, User.class);
     }
 
-    public TeamEntity toTeamEntity(Team team) { return modelMapper.map(team, TeamEntity.class);}
+    public TeamEntity toTeamEntity(Team team) {
+        return modelMapper.map(team, TeamEntity.class);
+    }
 
     public Team toTeam(TeamEntity entity) {
-        return modelMapper.map(entity, Team.class);
+        Team team = modelMapper.map(entity, Team.class);
+
+        List<User> users = new ArrayList<>();
+
+        for(UserTeamEntity ute : entity.getMembers()) {
+            users.add(toUser(ute.getUser()));
+        }
+
+        team.setMembers(users);
+        return team;
     }
 
     public TeamEntity toTeamEntity(NewTeam team) { return modelMapper.map(team, TeamEntity.class);}

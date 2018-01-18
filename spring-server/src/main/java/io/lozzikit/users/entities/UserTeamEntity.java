@@ -3,6 +3,7 @@ package io.lozzikit.users.entities;
 import io.lozzikit.users.api.model.User;
 
 import javax.persistence.*;
+import java.io.PrintWriter;
 import java.io.Serializable;
 
 /**
@@ -10,39 +11,60 @@ import java.io.Serializable;
  */
 @Entity
 public class UserTeamEntity implements Serializable{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Embeddable
+    public static class PrimaryKey implements Serializable {
+        @ManyToOne
+        @JoinColumn(name = "user_id")
+        private UserEntity user;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+        @ManyToOne
+        @JoinColumn(name = "team_id")
+        private TeamEntity team;
 
-    @ManyToOne
-    @JoinColumn(name = "team_id")
-    private TeamEntity team;
+        protected PrimaryKey() {
+        }
 
-    public long getId() {
-        return id;
+        public UserEntity getUser() {
+            return user;
+        }
+
+        public void setUser(UserEntity user) {
+            this.user = user;
+        }
+
+        public TeamEntity getTeam() {
+            return team;
+        }
+
+        public void setTeam(TeamEntity team) {
+            this.team = team;
+        }
     }
 
-    public void setId(long id) {
-        this.id = id;
+    @EmbeddedId
+    PrimaryKey primaryKey = new UserTeamEntity.PrimaryKey();
+
+    public void setPrimaryKey(PrimaryKey primaryKey) {
+        this.primaryKey = primaryKey;
+    }
+
+    public PrimaryKey getPrimaryKey() {
+        return this.primaryKey;
     }
 
     public UserEntity getUser() {
-        return user;
+        return primaryKey.getUser();
     }
 
     public void setUser(UserEntity user) {
-        this.user = user;
+        primaryKey.setUser(user);
     }
 
     public TeamEntity getTeam() {
-        return team;
+        return primaryKey.getTeam();
     }
 
     public void setTeam(TeamEntity team) {
-        this.team = team;
+        primaryKey.setTeam(team);
     }
 }

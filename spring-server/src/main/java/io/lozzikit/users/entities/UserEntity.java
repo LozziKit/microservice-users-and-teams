@@ -46,7 +46,7 @@ public class UserEntity implements Serializable {
     //@Size(min=6)
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "primaryKey.user")
     private Set<UserTeamEntity> teams = new HashSet<>();
 
     public long getId() {

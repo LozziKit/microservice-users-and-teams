@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,7 +61,6 @@ public class TeamsApiController implements TeamsApi {
                     ute.setUser(ue);
                     ute.setTeam(newTeamEntity);
                     userTeamRepository.save(ute);
-
                     members.add(ute);
                 }
             }
@@ -79,16 +79,57 @@ public class TeamsApiController implements TeamsApi {
 
     @Override
     public ResponseEntity<Team> getTeam(@ApiParam(value = "The id of the team", required = true) @PathVariable("id") Long id) {
-        return null;
+        TeamEntity te = teamService.getTeamById(id);
+        Team team = new Team();
+
+        if (te == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(daoDtoConverter.toTeam(te));
     }
 
     @Override
     public ResponseEntity<List<Team>> getTeams() {
-        return null;
+        List<TeamEntity> teams = new ArrayList<>();
+        List<Team> teamsToSend = new ArrayList<>();
+        teams = teamService.getTeamList();
+        for (TeamEntity teamEntity : teams) {
+            teamsToSend.add(daoDtoConverter.toTeam(teamEntity));
+        }
+        return ResponseEntity.ok(teamsToSend);
     }
 
     @Override
     public ResponseEntity<Void> updateTeam(@ApiParam(value = "The id of the team that needs to be fetched", required = true) @PathVariable("id") Long id, @ApiParam(value = "Modified team object", required = true) @RequestBody Team body) {
-        return null;
+        TeamEntity te = teamService.getTeamById(id);
+        Set<UserTeamEntity> members = new HashSet<>();
+
+        if (te == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        te.setName(body.getName());
+
+        for(User u : body.getMembers()) {
+            UserTeamEntity ute = new UserTeamEntity();
+            UserEntity ue = userService.getUserByUsername(u.getUsername());
+            if(ue != null) {
+                ute.setUser(ue);
+                ute.setTeam(te);
+                userTeamRepository.save(ute);
+                members.add(ute);
+            }
+        }
+
+        te.setMembers(members);
+
+        try {
+            teamService.save(te);
+        }catch (DataIntegrityViolationException dive){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        return ResponseEntity.ok().build();
     }
 }
