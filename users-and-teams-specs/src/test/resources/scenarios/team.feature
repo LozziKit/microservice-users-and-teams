@@ -21,5 +21,12 @@ Feature: Creation of team
     Given I have a valid Authorization token
     And I have a teamName that already exists
     When I POST it from the /teams endpoint
+    Then I receive a 409 status code
+    And I haven't received a team payload
+
+  Scenario: Create an team and I don't have a valid token
+    Given I don't have a valid Authorization token
+    And I don't have a valid teamName
+    When I POST it from the /teams endpoint
     Then I receive a 400 status code
     And I haven't received a team payload

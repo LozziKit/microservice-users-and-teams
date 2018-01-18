@@ -1,0 +1,64 @@
+Feature: list of teams
+
+  Background:
+    Given there is a users server
+
+  Scenario: List all teams and everything is good
+    Given I have a valid Authorization token
+    When I GET teams from the /team endpoint
+    Then I receive a 200 status code
+    And I've received a list of teams
+
+  Scenario: List member of a team and everything is good
+    Given I have a valid Authorization token
+    And I have a valid teamName
+    When I GET team from the /team endpoint
+    Then I receive a 200 status code
+    And I've received a team payload
+
+  Scenario: List member of a team and team is not exist
+    Given I have a valid Authorization token
+    And I don't have a valid teamName
+    When I GET team from the /team endpoint
+    Then I receive a 404 status code
+    And I'haven't received a team payload
+
+  Scenario: Update list member of a team and all is good
+    Given I don't have a valid Authorization token
+    And I have a valid teamPayload
+    When I PUT it from the /team endpoint
+    Then I receive a 200 status code
+    And I've received the team update payload
+
+  Scenario: Update list member of a team and I don't have a valid team payload
+    Given I don't have a valid Authorization token
+    And I don't have a valid teamPayload
+    When I PUT it from the /team endpoint
+    Then I receive a 400 status code
+    And I haven't received the team update payload
+
+  Scenario: Update list member of a team and all is good
+    Given I have a valid Authorization token
+    And I don't have a valid teamPayload
+    When I PUT it from the /team endpoint
+    Then I receive a 400 status code
+    And I haven't received the team update payload
+
+  Scenario: Update list member of a team and I don't have a valid token
+    Given I don't have a valid Authorization token
+    And I have a valid teamPayload
+    When I PUT it from the /team endpoint
+    Then I receive a 400 status code
+    And I haven't received the team update payload
+
+  Scenario: Update list member of a team and I don't have a valid team payload
+    Given I have a valid Authorization token
+    And I don't have a valid teamPayload
+    When I PUT it from the /team endpoint
+    Then I receive a 400 status code
+    And I haven't received the team update payload
+
+
+
+
+
