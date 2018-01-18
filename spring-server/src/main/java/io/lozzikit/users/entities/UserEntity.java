@@ -8,6 +8,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 767 bytes is the stated prefix limitation for InnoDB tables in MySQL version 5.6 (and prior versions). It's
@@ -43,6 +45,9 @@ public class UserEntity implements Serializable {
     //@NotNull
     //@Size(min=6)
     private String password;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<UserTeamEntity> teams = new HashSet<>();
 
     public long getId() {
         return id;
@@ -88,5 +93,16 @@ public class UserEntity implements Serializable {
 
     public void setPassword(String password) {
         this.password = Argon2Factory.create().hash(2, 256, 1, password);
+    }
+
+    public Set<UserTeamEntity> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(Set<UserTeamEntity> teams) {
+        this.teams = teams;
+        for(UserTeamEntity ute : teams) {
+            ute.setUser(this);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package io.lozzikit.users.utils;
 
+import io.lozzikit.users.api.model.NewTeam;
 import io.lozzikit.users.api.model.NewUser;
 import io.lozzikit.users.api.model.Team;
 import io.lozzikit.users.api.model.User;
@@ -19,6 +20,10 @@ public class DaoDtoConverter {
         return modelMapper.map(user, UserEntity.class);
     }
 
+    public UserEntity toUserEntity(User user) {
+        return modelMapper.map(user, UserEntity.class);
+    }
+
     public User toUser(UserEntity entity) {
         return modelMapper.map(entity, User.class);
     }
@@ -28,4 +33,6 @@ public class DaoDtoConverter {
     public Team toTeam(TeamEntity entity) {
         return modelMapper.map(entity, Team.class);
     }
+
+    public TeamEntity toTeamEntity(NewTeam team) { return modelMapper.map(team, TeamEntity.class);}
 }

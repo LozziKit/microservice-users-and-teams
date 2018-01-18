@@ -3,6 +3,7 @@ package io.lozzikit.users.api.endpoints;
 import io.lozzikit.users.api.UsersApi;
 import io.lozzikit.sdk.annotation.Authentication;
 import io.lozzikit.users.api.model.NewUser;
+import io.lozzikit.users.api.model.Team;
 import io.lozzikit.users.api.model.User;
 import io.lozzikit.users.api.model.UserModified;
 import io.lozzikit.users.entities.UserEntity;
@@ -47,6 +48,11 @@ public class UsersApiController implements UsersApi {
         }catch(DataIntegrityViolationException dive){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
+    }
+
+    @Override
+    public ResponseEntity<List<Team>> getTeamsByUser(@ApiParam(value = "The name that needs to be fetched. Use user1 for testing. ", required = true) @PathVariable("username") String username) {
+        return null;
     }
 
     @Authentication
