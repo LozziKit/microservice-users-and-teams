@@ -1,4 +1,4 @@
-FROM java:openjdk-8-jre
+FROM maven:3.5.2-jdk-7-alpine
 
 LABEL MAINTAINER "Daniel Palumbo <daniel.palumbo@heig-vd.ch>"
 LABEL MAINTAINER "Mathieu Monteverde <mathieu.monteverde@heig-vd.ch>"
