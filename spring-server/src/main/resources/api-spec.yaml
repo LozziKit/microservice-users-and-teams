@@ -87,6 +87,8 @@ paths:
         '404':
           description: User not found
     put:
+      security:
+        - Bearer: []
       tags:
         - user
       summary: Modify user
