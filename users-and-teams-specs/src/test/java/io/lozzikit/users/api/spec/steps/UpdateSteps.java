@@ -44,7 +44,18 @@ public class UpdateSteps {
         this.userApi = environment.getUserApi();
     }
 
-    @Given("^there is an existing user to update$")
+    public User getExistingUser() {
+        User u = new User();
+
+        u.setFirstName(existingUser.getFirstName());
+        u.setLastName(existingUser.getLastName());
+        u.setEmail(existingUser.getEmail());
+        u.setUsername(existingUser.getUsername());
+
+        return u;
+    }
+
+    @Given("^there is an existing user$")
     public void there_is_an_existing_user_to_update() throws ApiException {
         existingUser = new NewUser();
         existingUser.setUsername(UUID.randomUUID().toString());

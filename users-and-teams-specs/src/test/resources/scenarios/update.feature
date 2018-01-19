@@ -2,7 +2,7 @@ Feature: Update of users
 
   Background:
     Given there is a users server
-    Given there is an existing user to update
+    Given there is an existing user
     Given I have valid update payload
 
     Scenario: I Update all authorized informations of a user and everything is good
