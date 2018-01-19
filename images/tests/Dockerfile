@@ -9,4 +9,6 @@ LABEL MAINTAINER "Adrian Dipietro<adrian.dipietro@heig-vd.ch>"
 COPY users-and-teams-specs/ specs/
 COPY run-tests.sh run-tests.sh
 
+RUN mkdir /shared
+
 ENTRYPOINT ["./run-tests.sh"]

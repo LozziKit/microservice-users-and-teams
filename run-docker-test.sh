@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#docker run -it --entrypoint /bin/bash -eDATABASE_PORT=3306 -eDATABASE_USER=root -eDATABASE_PASSWORD=root -eDATABASE_NAME=lozzikitUsers -eDATABASE_HOST=database --network=microserviceusersandteams_default  lozzikit/users-and-teams/tests
+docker run -v ~/.m2:/root/.m2 -v shared:/shared --name testInfo -eDATABASE_PORT=3306 -eDATABASE_USER=root -eDATABASE_PASSWORD=root -eDATABASE_NAME=lozzikitUsers -eDATABASE_HOST=database --network=microserviceusersandteams_default  lozzikit/users-and-teams/tests
+
+docker cp testInfo:shared/cucumber/ ./shared
+
+docker rm testInfo
