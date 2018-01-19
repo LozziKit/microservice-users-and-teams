@@ -47,14 +47,12 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     request.setAttribute("user", user);
                 }
                 else {
-                    response.setStatus(401);
+                    response.setStatus(403);
                     return false;
                 }
             }
             catch(Exception e) {
-
-                //  Return 401 for any exceptions (This include ExpiredJwtException, MalformedJwtException, ...)
-                response.setStatus(401);
+                response.setStatus(403);
                 return false;
             }
         }
