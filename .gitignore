@@ -11,3 +11,5 @@ images/server/server.jar
 images/tests/pom.xml
 images/tests/src/
 images/tests/target/
+shared/
+images/tests/users-and-teams-specs/
