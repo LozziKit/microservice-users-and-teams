@@ -44,7 +44,18 @@ public class UpdateSteps {
         this.userApi = environment.getUserApi();
     }
 
-    @Given("^there is an existing user to update$")
+    public User getExistingUser() {
+        User u = new User();
+
+        u.setFirstName(existingUser.getFirstName());
+        u.setLastName(existingUser.getLastName());
+        u.setEmail(existingUser.getEmail());
+        u.setUsername(existingUser.getUsername());
+
+        return u;
+    }
+
+    @Given("^there is an existing user$")
     public void there_is_an_existing_user_to_update() throws ApiException {
         existingUser = new NewUser();
         existingUser.setUsername(UUID.randomUUID().toString());
@@ -112,8 +123,8 @@ public class UpdateSteps {
     public void i_haven_t_received_the_user_update_payload() throws Throwable {
         User user = userApi.getUser(existingUser.getUsername());
 
-        assertNotEquals(modifiedUser.getFirstName(), user.getFirstName());
-        assertNotEquals(modifiedUser.getLastName(), user.getLastName());
-        assertNotEquals(modifiedUser.getEmail(), user.getEmail());
+        assertEquals(existingUser.getFirstName(), user.getFirstName());
+        assertEquals(existingUser.getLastName(), user.getLastName());
+        assertEquals(existingUser.getEmail(), user.getEmail());
     }
 }

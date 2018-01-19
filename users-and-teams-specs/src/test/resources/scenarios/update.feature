@@ -2,7 +2,7 @@ Feature: Update of users
 
   Background:
     Given there is a users server
-    Given there is an existing user to update
+    Given there is an existing user
     Given I have valid update payload
 
     Scenario: I Update all authorized informations of a user and everything is good
@@ -48,5 +48,5 @@ Feature: Update of users
       And I update firstname
       When I PUT users from the /users endpoint
       Then I receive a 401 status code
-      And Given I have a valid Authorization token
+      Given I have a valid Authorization token
       And The user has not been updated
