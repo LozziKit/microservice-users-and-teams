@@ -84,7 +84,7 @@ public class AuthenticationSteps {
             lastApiResponse = authApi.authUserWithHttpInfo(credentials);
             apiSteps.setLastApiException(null);
             apiSteps.setLastStatusCode(lastApiResponse.getStatusCode());
-            token = ((List<String>)lastApiResponse.getHeaders().get("Authorization")).get(0);
+            token = (String)lastApiResponse.getData();
         } catch (ApiException e) {
             apiSteps.setLastApiException(e);
             Map<String, List<String>> headers = e.getResponseHeaders();
