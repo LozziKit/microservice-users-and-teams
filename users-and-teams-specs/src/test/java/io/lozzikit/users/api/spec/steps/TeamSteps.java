@@ -45,7 +45,11 @@ public class TeamSteps {
 
     private String location = null;
 
-    List<Team> receivedTeams = null;
+    private List<Team> receivedTeams = null;
+
+    private long teamId;
+
+    private Team receivedTeam;
 
 
     public TeamSteps(Environment environment, ApiSteps apiSteps, UpdateSteps updateSteps) {
@@ -130,32 +134,42 @@ public class TeamSteps {
 
     @Given("^I have a valid teamId$")
     public void i_have_a_valid_teamId() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        i_have_a_valid_team_payload();
+        i_POST_it_from_the_teams_endpoint();
+        i_GET_teams_from_the_team_endpoint();
+        i_ve_received_a_list_of_teams();
+
+        Team t = receivedTeams.get(0);
+        teamId = t.getId();
     }
 
     @When("^I GET team from the /team endpoint$")
     public void i_GET_team_from_the_team_endpoint() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        try {
+            ApiResponse<Team> response = teamApi.getTeamWithHttpInfo(teamId);
+            apiSteps.setLastApiException(null);
+            apiSteps.setLastStatusCode(response.getStatusCode());
+            receivedTeam = response.getData();
+            lastApiResponse = response;
+        } catch (ApiException e) {
+            apiSteps.setLastApiException(e);
+        }
     }
 
     @Then("^I've received a team payload$")
     public void i_ve_received_a_team_payload() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        assertNotNull(receivedTeam);
     }
 
     @Given("^I don't have a valid teamId$")
     public void i_don_t_have_a_valid_teamId() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        i_GET_team_from_the_team_endpoint();
+        i_haven_t_received_a_team_payload();
     }
 
     @Then("^I'haven't received a team payload$")
     public void i_haven_t_received_a_team_payload() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        assertNull(receivedTeam);
     }
 
     @Given("^I have a valid teamPayload$")
