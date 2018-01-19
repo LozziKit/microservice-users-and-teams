@@ -107,7 +107,7 @@ public class TeamsApiController implements TeamsApi {
 
     @Authentication
     @Override
-    public ResponseEntity<Void> updateTeam(@ApiParam(value = "The id of the team that needs to be fetched", required = true) @PathVariable("id") Long id, @ApiParam(value = "Modified team object", required = true) @RequestBody Team body) {
+    public ResponseEntity<Void> updateTeam(@ApiParam(value = "The id of the team that needs to be fetched", required = true) @PathVariable("id") Long id, @ApiParam(value = "Modified team object", required = true) @Valid @RequestBody Team body) {
         TeamEntity te = teamService.getTeamById(id);
         Set<UserTeamEntity> members = new HashSet<>();
 

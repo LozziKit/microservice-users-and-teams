@@ -361,6 +361,7 @@ definitions:
     properties:
       id:
         type: integer
+        minimum: 1
         format: int64
       name:
         type: string
