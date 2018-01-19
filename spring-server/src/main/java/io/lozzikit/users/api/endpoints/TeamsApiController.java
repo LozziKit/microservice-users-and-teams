@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -48,7 +49,7 @@ public class TeamsApiController implements TeamsApi {
 
     @Authentication
     @Override
-    public ResponseEntity<Void> createTeam(@ApiParam(value = "Created team object", required = true) @RequestBody NewTeam body) {
+    public ResponseEntity<Void> createTeam(@ApiParam(value = "Created team object", required = true) @Valid @RequestBody NewTeam body) {
         try{
             TeamEntity newTeamEntity = new TeamEntity();
             Set<UserTeamEntity> members = new HashSet<>();
