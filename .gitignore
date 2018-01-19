@@ -6,3 +6,8 @@ full-project/
 *.iml
 
 application-dbLogin.properties
+
+images/server/server.jar
+images/tests/pom.xml
+images/tests/src/
+images/tests/target/
