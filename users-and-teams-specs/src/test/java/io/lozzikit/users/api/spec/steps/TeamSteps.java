@@ -51,6 +51,8 @@ public class TeamSteps {
 
     private Team receivedTeam;
 
+    private Team sendingTeam;
+
 
     public TeamSteps(Environment environment, ApiSteps apiSteps, UpdateSteps updateSteps) {
         this.environment = environment;
@@ -59,6 +61,8 @@ public class TeamSteps {
 
         this.userApi = environment.getUserApi();
         this.teamApi = environment.getTeamApi();
+
+        sendingTeam = new Team();
     }
 
 
@@ -174,49 +178,38 @@ public class TeamSteps {
 
     @Given("^I have a valid teamPayload$")
     public void i_have_a_valid_teamPayload() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        i_have_a_valid_teamId();
+        i_GET_team_from_the_team_endpoint();
+        i_ve_received_a_team_payload();
+
+        sendingTeam.setId(receivedTeam.getId());
+        sendingTeam.setName(receivedTeam.getName());
+        sendingTeam.setMembers(receivedTeam.getMembers());
     }
 
     @When("^I PUT it from the /team endpoint$")
     public void i_PUT_it_from_the_team_endpoint() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^I've received the team update payload$")
-    public void i_ve_received_the_team_update_payload() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        try {
+            lastApiResponse = environment.getTeamApi().updateTeamWithHttpInfo(teamId, sendingTeam);
+            apiSteps.setLastApiException(null);
+            apiSteps.setLastStatusCode(lastApiResponse.getStatusCode());
+        } catch(ApiException e){
+            apiSteps.setLastApiException(e);
+        }
     }
 
     @Given("^I don't have a valid teamPayload$")
     public void i_don_t_have_a_valid_teamPayload() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^I haven't received the team update payload$")
-    public void i_haven_t_received_the_team_update_payload() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        sendingTeam.setId((long)-1);
     }
 
     @Given("^I update name of team with valid teamName$")
     public void i_update_name_of_team_with_valid_teamName() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^I'v received the team update payload$")
-    public void i_v_received_the_team_update_payload() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        sendingTeam.setName(UUID.randomUUID().toString());
     }
 
     @Given("^I update the name of team and is already exists$")
     public void i_update_the_name_of_team_and_is_already_exists() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        sendingTeam.setName(newTeam.getName());
     }
 }
