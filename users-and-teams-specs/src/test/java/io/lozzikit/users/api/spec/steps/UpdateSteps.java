@@ -112,8 +112,8 @@ public class UpdateSteps {
     public void i_haven_t_received_the_user_update_payload() throws Throwable {
         User user = userApi.getUser(existingUser.getUsername());
 
-        assertNotEquals(modifiedUser.getFirstName(), user.getFirstName());
-        assertNotEquals(modifiedUser.getLastName(), user.getLastName());
-        assertNotEquals(modifiedUser.getEmail(), user.getEmail());
+        assertEquals(existingUser.getFirstName(), user.getFirstName());
+        assertEquals(existingUser.getLastName(), user.getLastName());
+        assertEquals(existingUser.getEmail(), user.getEmail());
     }
 }

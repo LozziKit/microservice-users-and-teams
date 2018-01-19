@@ -48,5 +48,5 @@ Feature: Update of users
       And I update firstname
       When I PUT users from the /users endpoint
       Then I receive a 401 status code
-      And Given I have a valid Authorization token
+      Given I have a valid Authorization token
       And The user has not been updated
