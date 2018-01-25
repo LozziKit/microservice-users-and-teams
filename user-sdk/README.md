@@ -81,5 +81,11 @@ endpoint using :
     String username = (String) request.getAttribute("user");
 ```
 
+### Development 
+
+If you're participating to the development of this tool, and want to know how to deploy it, please read 
+[these instructions](deploy/).
+
+
 
 
