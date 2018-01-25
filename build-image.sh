@@ -23,3 +23,6 @@ docker build -t lozzikit/users-and-teams/server .
 echo "----- Building image tests ------"
 cd ../tests
 docker build -t lozzikit/users-and-teams/tests .
+
+echo "----- Create the shared volume ------"
+docker volume create shared

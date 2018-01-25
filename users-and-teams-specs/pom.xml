@@ -96,7 +96,7 @@
                             </outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/../
+                                    <directory>${project.basedir}/
                                     </directory>
                                     <includes>
                                         <include>api-spec.yaml</include>
@@ -188,4 +188,5 @@
         </dependency>
 
     </dependencies>
+
 </project>

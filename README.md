@@ -19,14 +19,15 @@ This script will do several things:
     1. `database` that will host the database using mariadb
     2. `server` that will run the server
     3. `tests` that will run the cucumber tests
+5. Create a volume to share info between the `tests` container and a local directory
 
-When the different images as been build, you can run the `database` and `server` container with the following command:
+When the different images has been build, you can run the `database` and `server` container with the following command:
 
 ```
 $ docker-compose up
 ```
 
-If you want (or need) to run the tests container, you can use the script in **images -> tests -> docker-run-image.sh** but make sure the other container are running. This script has two different command :
+If you want (or need) to run the tests container, you can use the script **run-docker-test.sh** but make sure the other container (`database` and `server`) are running. This script has two different command :
 
 * The first one is to get access to the `tests` container in case you need to do some debugging while it runs
 * the second one will automatically run the cucumber tests
