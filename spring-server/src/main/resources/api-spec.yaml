@@ -151,7 +151,7 @@ paths:
       description: Authenticate a user
       operationId: authUser
       produces:
-        - application/json
+        - text/plain
       parameters:
         - in: body
           name: body
