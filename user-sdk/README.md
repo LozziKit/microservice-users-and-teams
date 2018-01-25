@@ -16,7 +16,7 @@ simple annotations on your endpoints. How cool is that ?
 
 You'll need to copy the following dependencies in your pom.xml:
 
-```
+```xml
 <dependency>
     <groupId>io.lozzikit</groupId>
     <artifactId>users-sdk</artifactId>
@@ -27,7 +27,7 @@ You'll need to copy the following dependencies in your pom.xml:
 Since this SDK is not yet on the Maven central repository, you'll also need to add the following 
 repository in your pom.xml:
 
-```
+```xml
 <repositories>
     <repository>
         <id>myCustomRepository</id>
@@ -44,7 +44,7 @@ There, you're ready to use the SDK !
 
 First, add the following line (if it doesn't already exist) in your application. If you already have this annotation, simply add the `io.lozzikit.sdk` package name to the list of base packages.
 
-```
+```java
 @ComponentScan(basePackages = { "io.lozzikit.sdk" })
 ```
 
@@ -53,13 +53,13 @@ First, add the following line (if it doesn't already exist) in your application.
 What you'll want next is to use the SDK to protect some of your endpoints from non-authenticated users. Simply add the 
 following annotation to said endpoints (or method for that matter):
 
-```
+```java
 @Authentication
 ```
 
 **Example :**
 
-```
+```java
 @Controller
 public class HomeController {
     @Authentication // The root of my API now needs authentication, awesome !
@@ -76,10 +76,16 @@ This annotation will return a 401 code to an unauthenticated user. If the user i
 the **microservice-users-and-teams** microservice, you can retrieve the username of that user in your 
 endpoint using :
 
-```
+```java
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     String username = (String) request.getAttribute("user");
 ```
+
+### Development 
+
+If you're participating to the development of this tool, and want to know how to deploy it, please read 
+[these instructions](deploy/).
+
 
 
 

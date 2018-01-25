@@ -1,4 +1,8 @@
 #!/bin/sh
+echo "----- Building user-sdk ------"
+cd user-sdk/
+mvn clean install
+cd ..
 
 echo "----- Building server JAR ------"
 cd spring-server/
@@ -10,7 +14,7 @@ cp target/microservice-users-and-teams-server-1.0.0.jar ../images/server/server.
 
 rm -r ../images/tests/users-and-teams-specs/
 mkdir ../images/tests/users-and-teams-specs/
-cp -r ../users-and-teams-specs/ ../images/tests/
+cp -r ../users-and-teams-specs ../images/tests/
 
 echo "----- Building image database ------"
 cd ../database
