@@ -7,9 +7,11 @@ To do so, you'll have to follow these instructions.
 
 (The original tutorial can be found [Here](https://mymavenrepo.com/docs/maven.html))
 
-## Add a new profile to your  `~/.m2/settings.xml` file
+## Add a new profile to maven
 
-```
+Add the following profile to your `~/.m2/settings.xml` file.
+
+```xml
 <settings>
     <profiles>
         <profile>
@@ -29,9 +31,9 @@ To do so, you'll have to follow these instructions.
 ```
 
 You'll notice the read and write url properties. The read url is a public known url used by the sdk users to download
-the maven dependency. The write url however is a trade mark secret that can't be shared. The next step is to contact one of the team members to retrieve that link. Once you have it, add it inside the `myMavenRepo.write.url` in the settings.xml file.
+the maven dependency. The write url however is a trade mark secret that can't be shared. The next step is to contact one of the team members to retrieve that link. Once you have it, add it inside the `myMavenRepo.write.url` property tag in the settings.xml file.
 
-The pom.xml file of the user-sdk project already contains the configuration to use these properties if you named them exactly the right way.
+The `pom.xml` file of the **user-sdk** project already contains the configuration to use these properties if you named them exactly the right way.
 
 ## Deploy the project
 
