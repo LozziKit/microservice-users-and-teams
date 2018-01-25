@@ -1,4 +1,8 @@
 #!/bin/sh
+echo "----- Building user-sdk ------"
+cd user-sdk/
+mvn clean install
+cd ..
 
 echo "----- Building server JAR ------"
 cd spring-server/
