@@ -22,6 +22,10 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        if (handler.getClass() != HandlerMethod.class) {
+            return true;
+        }
+
         HandlerMethod hm = (HandlerMethod) handler;
         Method method = hm.getMethod();
 
