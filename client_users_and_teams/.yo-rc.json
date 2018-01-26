@@ -1,0 +1,28 @@
+{
+  "generator-angm": {
+    "appName": "users-and-teams",
+    "angularCookies": true,
+    "angularAnimate": true,
+    "angularSanitize": true,
+    "angularBootstrap": true,
+    "angularMaterial": true,
+    "modules": [
+      {
+        "name": "profile"
+      },
+      {
+        "name": "connexion"
+      }
+    ],
+    "menu": [
+      {
+        "link": "profile",
+        "title": "Profile"
+      },
+      {
+        "link": "connexion",
+        "title": "Connexion"
+      }
+    ]
+  }
+}

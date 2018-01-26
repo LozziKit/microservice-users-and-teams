@@ -1,0 +1,170 @@
+<div class="md-padding" flex layout-sm="column" ng-show=!vm.cheklogin()>
+  <md-card>
+    <md-card-content>
+      <p>You must be logged in to access this section.</p>
+      <p><a href="http://127.0.0.1:4000/#!/connexion">Click here !</a> </p>
+    </md-card-content>
+  </md-card>
+</div>
+
+<div class="md-padding" flex layout-sm="column" ng-show=vm.cheklogin()>
+  <md-card>
+    <md-card-content>
+      <md-card md-theme="{{ showDarkTheme ? 'dark-blue' : 'default' }}" md-theme-watch>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Username : {{vm.profile.username}}</span>
+            <span class="md-subhead">First name : {{vm.profile.firstName}} </span>
+            <span class="md-subhead">Last name : {{vm.profile.lastName}} </span>
+            <span class="md-subhead">Email : {{vm.profile.email}}</span>
+          </md-card-title-text>
+          <md-card-title-media>
+            <div class="md-media-md card-media" src></div>
+          </md-card-title-media>
+        </md-card-title>
+        <md-card-actions layout="row" layout-align="end" >
+          <md-button class="md-raised md-primary" ng-disabled="vm.isCreated" ng-click="vm.showCreateTeam()">Create team</md-button>
+           <md-button class="md-raised md-primary" ng-disabled="vm.showUpdate" ng-click="vm.update()">Update account</md-button>
+        </md-card-actions>
+    </md-card-content>
+  </md-card>
+
+  <!-- Informations du users et de ces teams-->
+  <div layout="row" ng-show="!vm.showUpdate">
+    <div flex=40>
+      <md-card>
+        <md-card-content>
+          <md-list class="md-dense">
+            <md-subheader class="md-no-sticky">List teams</md-subheader>
+              <md-list-item class="md-3-line" ng-repeat="item in vm.listTeams.teams">         
+                <div class="md-list-item-text" layout="column">
+                  <h3>Name : {{ item.name }}</h3>     
+                  <p>Id : {{ item.id }}</p>
+                </div>
+              </md-list-item>
+            <md-divider ></md-divider>
+          </md-list>
+        </md-card-content>
+      </md-card>
+    </div>
+
+    <div flex="60">
+       <md-card layout="row" ng-show="!vm.showNewAccount">
+        <md-card-content ng-show="vm.isCreated">
+            <md-input-container class="md-block">
+              <form name="formTeam">
+                <md-content layout="column">
+                  <label>Team name</label>
+                  <input minLength="4" required  name="teamName" ng-model="vm.createTeamName">
+                  <div ng-messages="formTeam.un.$error">
+                      <div ng-message="required">This is required.</div>
+                      <div ng-message="minlength">The description must be more than 4 characters long.</div>
+                  </div>
+                </md-content>
+                <md-card-actions layout="row" layout-align="end" >
+                    <md-button  class="md-raised md-primary"  ng-click="vm.hideCreateTeam()">Cancel</md-button>
+                    <md-button type="submit" class="md-raised md-primary"  ng-click="vm.createTeam()">Create</md-button>
+                </md-card-actions>
+              </form>
+            </md-input-container>
+        </md-card-content>
+    </md-card>
+
+
+      <md-card layout="row">
+        <md-card-content flex=70 > 
+            <md-list class="md-dense">
+              <md-subheader class="md-no-sticky">List users</md-subheader>
+              <md-list-item class="md-3-line" ng-repeat="item in vm.listTeams.select.members">         
+                  <div class="md-list-item-text" layout="column">
+                    <h3>{{ item.username }}</h3>
+                    <p>{{ item.email }}</p>
+                  </div>
+                  </md-list-item>
+              <md-divider ></md-divider>
+              </md-list>
+        
+        </md-card-content>
+        <md-card-content flex=30>
+            <md-select class="md-block" ng-change="vm.selectTeam()" ng-model="vm.nameTeamSelect">
+              <md-option 
+                  ng-repeat="item in vm.listTeams.teams" value="{{item.name}}">{{item.name}}
+              </md-option>
+            </md-select> 
+        </md-card-content>
+      </md-card>
+    </div>
+  </div>
+
+  <!-- Formulaire d'update -->
+  <md-card ng-show="vm.showUpdate">
+    <md-card-content>
+        <form name="updateForm" >
+            <md-content layout="column" layout-padding="">
+              <div layout="row" >
+              <div flex="30"style="margin-right:10px; margin-left:10px;">
+                <md-input-container class="md-block">
+                    <label>First name</label>
+                    <input minLength="4" required  name="firstName" ng-model="vm.profileUpdate.firstName">
+                    <div ng-messages="updateForm.firstName.$error">
+                        <div ng-message="required">This is required.</div>
+                        <div ng-message="minlength">The description must be more than 4 characters long.</div>
+                    </div>
+                </md-input-container>
+              </div>
+              <div flex="30"style="margin-right:10px; margin-left:10px;">
+                <md-input-container class="md-block">
+                    <label>Last name</label>
+                    <input minLength="4" required  name="lastname" ng-model="vm.profileUpdate.lastName">
+                    <div ng-messages="updateForm.lastname.$error">
+                        <div ng-message="required">This is required.</div>
+                        <div ng-message="minlength">The description must be more than 4 characters long.</div>
+                    </div>
+                </md-input-container>
+              </div>
+              <div flex="30"style="margin-right:10px; margin-left:10px;">
+                  <md-input-container class="md-block">
+                      <label>Email</label>
+                      <input minLength="4" required  name="email" ng-model="vm.profileUpdate.email" ng-pattern="/^.+@.+\..+$/">
+                      <div ng-messages="updateForm.email.$error">
+                          <div ng-message="required">This is required.</div>
+                          <div ng-message="minLength">The description must be more than 4 characters long.</div>
+                          <div ng-message="pattern">This email must look like an e-mail address</div>
+                      </div>
+                  </md-input-container>
+                </div>
+              </div>
+              <div layout="row">
+                  <div flex="50"style="margin-right:10px; margin-left:10px;">
+                  <md-input-container class="md-block">
+                      <label>Password</label>
+                      <input minlength="4" type="password" required name="pwdnew" ng-model="vm.profileUpdate.password">
+                      <div ng-messages="updateForm.pwdnew.$error">
+                          <div ng-message="required">This is required.</div>
+                          <div ng-message="minLength">The description must be more than 4 characters long.</div>
+                      </div>
+                  </md-input-container>
+                  </div>
+                  <div flex="50"style="margin-right:10px; margin-left:10px;">
+                    <md-input-container class="md-block">
+                            <label>Confirm Password</label>
+                            <input type="password" minLength="4" required  name="confirm_password" ng-model="vm.profileUpdate.confirm_password" compare-to="vm.profileUpdate.password">
+                            <div ng-messages="updateForm.confirm_password.$error">
+                                <div ng-message="required">This is required.</div>
+                                <div ng-message="minLength">The description must be more than 4 characters long.</div>
+                            </div>
+                    </md-input-container>
+                  </div>
+                </div>
+                <div layout="column" layout-align="center center">
+                    <div>
+                        <md-button ng-click="vm.cancelUpdate()" class="md-raised md-primary">Cancel</md-button>
+                        <md-button type="submit" ng-click="vm.putUpdate()" class="md-raised md-primary">Update</md-button>
+                    </div>                          
+                </div>
+            </md-content>
+        </form>
+      </div>
+    </md-card-content>
+  </md-card>
+</div>

@@ -1,0 +1,104 @@
+<div class="md-padding" flex layout-sm="column">
+    <md-card>
+        <md-card-content>
+            <div>
+            You can select the "sign in" option or "create an account".
+            </div>
+            <md-input-container style="margin-right: 10px;">
+            <label>Login / Create account</label>
+                <md-select class="md-block" ng-change="vm.switchView()" ng-model="vm.account.select" style="min-width: 200px; max-width: 200px">
+                    <md-option 
+                        ng-repeat="account in vm.account.type" 
+                        value="{{account.value}}">{{account.value}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+            <form name="connexionform" ng-show="!vm.showNewAccount">
+                <md-content layout="column" layout-padding="">
+                    <md-input-container class="md-block">
+                        <label>Username</label>
+                        <input minLength="4" required  name="un" ng-model="vm.user.username">
+                        <div ng-messages="connexionform.un.$error">
+                            <div ng-message="required">This is required.</div>
+                            <div ng-message="minlength">The description must be more than 4 characters long.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Password</label>
+                        <input type="password" minLength="4" required  name="pwd" ng-model="vm.user.password">
+                        <div ng-messages="connexionform.pwd.$error">
+                            <div ng-message="required">This is required.</div>
+                            <div ng-message="minlength">The description must be more than 4 characters long.</div>
+                        </div>
+                    </md-input-container>
+                    <div layout="column" layout-align="center center">
+                        <div>
+                            <md-button  type="submit" ng-click="vm.signIn()" class="md-raised md-primary">Sign in</md-button>
+                        </div>                          
+                    </div>
+                </md-content>
+            </form>
+
+            <form name="registration_form" ng-show="vm.showNewAccount">
+                <md-content layout="column" layout-padding="">
+                    <md-input-container class="md-block">
+                        <label>First name</label>
+                        <input minLength="4" required  name="firstName" ng-model="vm.newUser.firstName">
+                        <div ng-messages="registration_form.firstName.$error">
+                            <div ng-message="required">This is required.</div>
+                            <div ng-message="minlength">The description must be more than 4 characters long.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Last name</label>
+                        <input minLength="4" required  name="lastname" ng-model="vm.newUser.lastName">
+                        <div ng-messages="registration_form.lastname.$error">
+                            <div ng-message="required">This is required.</div>
+                            <div ng-message="minlength">The description must be more than 4 characters long.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Email</label>
+                        <input minLength="4" required  name="email" ng-model="vm.newUser.email" ng-pattern="/^.+@.+\..+$/">
+                        <div ng-messages="registration_form.email.$error">
+                            <div ng-message="required">This is required.</div>
+                            <div ng-message="minLength">The description must be more than 4 characters long.</div>
+                            <div ng-message="pattern">This email must look like an e-mail address</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                            <label>Username</label>
+                            <input minLength="4" required  name="unnew" ng-model="vm.newUser.username">
+                            <div ng-messages="registration_form.unnew.$error">
+                                <div ng-message="required">This is required.</div>
+                                <div ng-message="minlength">The description must be more than 4 characters long.</div>
+                            </div>
+                        </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Password</label>
+                        <input minlength="4" type="password" required name="pwdnew" ng-model="vm.newUser.password">
+                        <div ng-messages="registration_form.pwdnew.$error">
+                            <div ng-message="required">This is required.</div>
+                            <div ng-message="minLength">The description must be more than 4 characters long.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                            <label>Confirm Password</label>
+                            <input type="password" minLength="4" required  name="confirmPassword" ng-model="vm.confirmPassword" compare-to="vm.newUser.password">
+                            <div ng-messages="registration_form.confirmPassword.$error">
+                                <div ng-message="required">This is required.</div>
+                                <div ng-message="minLength">The description must be more than 4 characters long.</div>
+                            </div>
+                        </md-input-container>
+                    <div layout="column" layout-align="center center">
+                        <div>
+                            <md-button type="submit" ng-click="vm.createAccount()" class="md-raised md-primary">Inscription</md-button>
+                        </div>                          
+                    </div>
+                </md-content>
+            </form>
+        </md-card-content>
+    </md-card>
+</div>
+    
