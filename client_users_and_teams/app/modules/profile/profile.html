@@ -49,8 +49,8 @@
     </div>
 
     <div flex="60">
-       <md-card layout="row" ng-show="!vm.showNewAccount">
-        <md-card-content ng-show="vm.isCreated">
+       <md-card layout="row" >
+        <md-card-content ng-show="vm.isCreated" ng-show="!vm.showNewAccount">
             <md-input-container class="md-block">
               <form name="formTeam">
                 <md-content layout="column">
@@ -68,30 +68,45 @@
               </form>
             </md-input-container>
         </md-card-content>
-    </md-card>
-
-
-      <md-card layout="row">
-        <md-card-content flex=70 > 
+   
+        <md-card-content flex="60"> 
             <md-list class="md-dense">
-              <md-subheader class="md-no-sticky">List users</md-subheader>
+              <md-subheader class="md-no-sticky">Members of the selected team</md-subheader>
               <md-list-item class="md-3-line" ng-repeat="item in vm.listTeams.select.members">         
                   <div class="md-list-item-text" layout="column">
                     <h3>{{ item.username }}</h3>
+                    <p>{{item.firstName}} {{item.lastName}}</p>
                     <p>{{ item.email }}</p>
                   </div>
                   </md-list-item>
               <md-divider ></md-divider>
               </md-list>
+        </md-card-content>
         
-        </md-card-content>
-        <md-card-content flex=30>
-            <md-select class="md-block" ng-change="vm.selectTeam()" ng-model="vm.nameTeamSelect">
-              <md-option 
-                  ng-repeat="item in vm.listTeams.teams" value="{{item.name}}">{{item.name}}
-              </md-option>
-            </md-select> 
-        </md-card-content>
+        <div layout="column">
+          <form name="updateTeamForm">
+            <md-card-content >
+                <label>Select your team</label>
+                <md-select class="md-block" ng-change="vm.selectTeam()" ng-model="vm.nameTeamSelect">
+                  <md-option 
+                      ng-repeat="item in vm.listTeams.teams" value="{{item.name}}">{{item.name}}
+                  </md-option>
+                </md-select> 
+
+                <label >Select an user</label>
+                <md-select class="md-block" ng-change="vm.selectUser()" ng-model="vm.selectUserOnList">
+                  <md-option 
+                      ng-repeat="item in vm.listUsers.users" value="{{item.username}}">{{item.username}}
+                  </md-option>
+                </md-select> 
+           
+
+            <md-card-actions>
+                <md-button type="submit"  class="md-raised md-primary"  ng-click="vm.updateTeam()">Add user on team</md-button>
+            </md-card-actions>
+          </md-card-content>
+          </form>
+        </div>
       </md-card>
     </div>
   </div>

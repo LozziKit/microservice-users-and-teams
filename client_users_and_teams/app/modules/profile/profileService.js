@@ -159,12 +159,71 @@
 				);
 			};
 
+			// Update a team
+			// Call PUT api/teams
+			function updateTeam(team, newMember){
+				var datas = {
+					id: team.id,
+					name: team.name,
+					members: team.members,
+				};
+
+				datas.members.push(newMember);
+
+				var req = {
+					method: 'PUT',
+					url: 'http://localhost:8080//api/teams',
+					headers: {
+						'Authorization': 'Bearer ' + homeService.getToken(),
+						'Accept': 'application/json',
+					},
+					data: datas
+				};
+				console.log(req);
+
+					$http(req)
+						.then(function (response) {
+							var status = { status: response.status, message: response.statusText, data:{} };
+							homeService.setStatus(status);
+						}, function (error) {
+							var status = { status: error.status, message: error.statusText, data:{} };
+							homeService.setStatus(status);
+						}
+					);
+				};
+
+			// Get the users informations
+			// Call GET api/users/{username}
+			function getUsers(){
+				var req = {
+					method: 'GET',
+					url: 'http://localhost:8080/api/users/',
+					headers: {
+						'Authorization': 'Bearer ' + homeService.getToken(),
+						'Accept': 'application/json',
+					},
+				};
+	
+				$http(req)
+					.then(function (response) {
+						homeService.setListUsers(response.data);
+						var status = { status: response.status, message: response.statusText, data:{} };
+						homeService.setStatus(status);
+					}, function (error) {
+						var status = { status: error.status, message: error.statusText, data:{} };
+						homeService.setStatus(status);
+					}
+				);
+			}
+
 			return{
 				getUser: getUser,
 				updateUser: updateUser,
 				getTeamsOfUser: getTeamsOfUser,
 				getTeam: getTeam,
 				createTeam: createTeam,
+				getUsers: getUsers,
+				updateTeam: updateTeam,
 			};
 		}
 

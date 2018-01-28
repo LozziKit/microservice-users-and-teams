@@ -39,6 +39,8 @@
 
 		// List of teams of the connected user
 		var listMyTeams = [];
+
+		var listUsers = [];
 	
 		/** Getters / Setters */
 		function setListMyTeams(newList){
@@ -77,6 +79,15 @@
 		function getUserInfos(){
 			return userInfos;
 		}
+		function setListUsers(newList){
+			listUsers = [];
+			for(var i= 0; i < newList.length; i++){
+				listUsers.push(newList[i]);
+			}
+		}
+		function getListUsers(){
+			return listUsers;
+		}
 		
 		// Display to the console the status of request API
 		function checkStatus(code){
@@ -86,6 +97,8 @@
 				console.log('failed');
 			}
 		}
+
+	
 
 		return {
 			setStatus: setStatus,
@@ -98,6 +111,8 @@
 			setUserName: setUserName,
 			getListMyTeams: getListMyTeams,
 			setListMyTeams: setListMyTeams,
+			setListUsers: setListUsers,
+			getListUsers: getListUsers,
 		};
 	}
 

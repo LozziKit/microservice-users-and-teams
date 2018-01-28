@@ -36,6 +36,11 @@
 				select : null,
 			};	
 
+			vm.listUsers ={
+				users: homeService.getListUsers(),
+				select : null,
+			}
+
 			vm.profileUpdate = {
 				username:'',
 				firstName:'',
@@ -47,6 +52,16 @@
 
 			vm.nameTeamSelect = 'Not selected';
 			vm.createTeamName = '';
+			vm.selectUserOnList = '';
+
+			// update a team
+			vm.updateTeam = function(){
+				console.log('team');
+				console.log(vm.listTeams.select);
+				console.log('user');
+				console.log(vm.listUsers.select);
+				profileService.updateTeam(vm.listTeams.select, vm.listUsers.select);
+			};
 
 			// update listViews of teams 
 			vm.updateListTeams = function(){
@@ -106,6 +121,14 @@
 					}
 				});
 			};
+
+			vm.selectUser = function(){
+				vm.listUsers.users.forEach((element) =>{
+					if(element.username === vm.selectUserOnList){
+						vm.listUsers.select = element;
+					}
+				});
+			}
 
 			// update account of user
 			vm.putUpdate = function(){
