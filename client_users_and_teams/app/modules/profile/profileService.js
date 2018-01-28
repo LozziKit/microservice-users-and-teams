@@ -172,14 +172,13 @@
 
 				var req = {
 					method: 'PUT',
-					url: 'http://localhost:8080//api/teams',
+					url: 'http://localhost:8080//api/teams/'+ team.id,
 					headers: {
 						'Authorization': 'Bearer ' + homeService.getToken(),
 						'Accept': 'application/json',
 					},
 					data: datas
 				};
-				console.log(req);
 
 					$http(req)
 						.then(function (response) {

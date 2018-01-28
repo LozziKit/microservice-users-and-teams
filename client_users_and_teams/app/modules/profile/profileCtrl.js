@@ -26,8 +26,8 @@
 			var vm = this;
 
 			// show/hide views
-			vm.showUpdate = false;
-			vm.isCreated = false;
+			vm.isUpdating = false;
+			vm.isTeamCreating = false;
 
 			vm.token = homeService.getToken();
 			vm.profile = homeService.getUserInfos();
@@ -35,12 +35,10 @@
 				teams: homeService.getListMyTeams(),
 				select : null,
 			};	
-
 			vm.listUsers ={
 				users: homeService.getListUsers(),
 				select : null,
 			}
-
 			vm.profileUpdate = {
 				username:'',
 				firstName:'',
@@ -50,17 +48,33 @@
 				profil_password:'',
 			};
 
-			vm.nameTeamSelect = 'Not selected';
+			vm.nameTeamSelect = '';
 			vm.createTeamName = '';
 			vm.selectUserOnList = '';
 
+			vm.isUpdatingOrCreating = function(){
+				if(vm.isTeamCreating || vm.isUpdating){
+					return true;
+				}
+				return false;
+			}
+
+			
+
+
 			// update a team
 			vm.updateTeam = function(){
-				console.log('team');
-				console.log(vm.listTeams.select);
-				console.log('user');
-				console.log(vm.listUsers.select);
-				profileService.updateTeam(vm.listTeams.select, vm.listUsers.select);
+				if(vm.listUsers.select != null){
+					var alreadyOnList = false;
+					vm.listTeams.select.members.forEach((element)=> {
+						if(element.username == vm.listUsers.select.username){
+							alreadyOnList = true;
+						}
+					});
+					if(alreadyOnList == false){
+						profileService.updateTeam(vm.listTeams.select, vm.listUsers.select);
+					}
+				}
 			};
 
 			// update listViews of teams 
@@ -71,24 +85,24 @@
 
 			// display creation of team
 			vm.showCreateTeam = function(){
-				vm.isCreated = true;
+				vm.isTeamCreating = true;
 			};
 			// hide creation of team
 			vm.hideCreateTeam = function(){
-				vm.isCreated = false;
+				vm.isTeamCreating = false;
 			}
 
 			// create a team
 			vm.createTeam = function(){
 				profileService.createTeam(vm.createTeamName);
-				vm.isCreated = false;
+				vm.isTeamCreating = false;
 				// wait for the server to be updated 
 				$timeout( function(){
 					profileService.getTeamsOfUser(homeService.getUserName());	
-				}, 1000);
+				}, 500);
 				$timeout( function(){
 					vm.updateListTeams();
-				}, 2000);
+				}, 600);
 				
 			};
 
@@ -110,7 +124,7 @@
 				vm.profileUpdate.email = infos.email;
 				vm.profileUpdate.username = infos.username;
 
-				vm.showUpdate = true;
+				vm.isUpdating = true;
 			};
 
 			// select the team corresponding to the select input
@@ -122,6 +136,7 @@
 				});
 			};
 
+			// Select the user for add on selected team
 			vm.selectUser = function(){
 				vm.listUsers.users.forEach((element) =>{
 					if(element.username === vm.selectUserOnList){
@@ -147,11 +162,12 @@
 						password: vm.profileUpdate.password,
 						});
 				}
+				vm.isUpdating = false;
 			};
 
 			// hide the update view
 			vm.cancelUpdate = function(){
-				vm.showUpdate = false;
+				vm.isUpdating = false;
 			};
 	}
 

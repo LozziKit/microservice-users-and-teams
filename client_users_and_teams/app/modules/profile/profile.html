@@ -23,14 +23,14 @@
           </md-card-title-media>
         </md-card-title>
         <md-card-actions layout="row" layout-align="end" >
-          <md-button class="md-raised md-primary" ng-disabled="vm.isCreated" ng-click="vm.showCreateTeam()">Create team</md-button>
-           <md-button class="md-raised md-primary" ng-disabled="vm.showUpdate" ng-click="vm.update()">Update account</md-button>
+          <md-button class="md-raised md-primary" ng-disabled="vm.isUpdatingOrCreating()"  ng-click="vm.showCreateTeam()">Create team</md-button>
+           <md-button class="md-raised md-primary" ng-disabled="vm.isUpdatingOrCreating()" ng-click="vm.update()">Update account</md-button>
         </md-card-actions>
     </md-card-content>
   </md-card>
 
   <!-- Informations du users et de ces teams-->
-  <div layout="row" ng-show="!vm.showUpdate">
+  <div layout="row" ng-show="!vm.isUpdating">
     <div flex=40>
       <md-card>
         <md-card-content>
@@ -42,40 +42,44 @@
                   <p>Id : {{ item.id }}</p>
                 </div>
               </md-list-item>
-            <md-divider ></md-divider>
+            <md-divider></md-divider>
           </md-list>
         </md-card-content>
       </md-card>
     </div>
 
+    <!-- Card right -->
     <div flex="60">
-       <md-card layout="row" >
-        <md-card-content ng-show="vm.isCreated" ng-show="!vm.showNewAccount">
-            <md-input-container class="md-block">
-              <form name="formTeam">
-                <md-content layout="column">
-                  <label>Team name</label>
-                  <input minLength="4" required  name="teamName" ng-model="vm.createTeamName">
-                  <div ng-messages="formTeam.un.$error">
-                      <div ng-message="required">This is required.</div>
-                      <div ng-message="minlength">The description must be more than 4 characters long.</div>
-                  </div>
-                </md-content>
-                <md-card-actions layout="row" layout-align="end" >
-                    <md-button  class="md-raised md-primary"  ng-click="vm.hideCreateTeam()">Cancel</md-button>
-                    <md-button type="submit" class="md-raised md-primary"  ng-click="vm.createTeam()">Create</md-button>
-                </md-card-actions>
-              </form>
-            </md-input-container>
+       <md-card layout="row">
+         <!-- Create a new team form, show with button create team, hide with cancel or create -->
+        <md-card-content ng-show="vm.isTeamCreating" ng-show="!vm.showNewAccount" flex="100" layout-align="center center">
+          <form name="formTeam"> 
+            <md-content layout="column" layout-padding>
+              <md-input-container class="md-block">      
+                <label>Team name</label>
+                <input minLength="4" required  name="teamName" ng-model="vm.createTeamName">
+                <div ng-messages="formTeam.un.$error">
+                    <div ng-message="required">This is required.</div>
+                    <div ng-message="minlength">The description must be more than 4 characters long.</div>
+                </div>
+              </md-input-container>
+         
+              <md-card-actions>
+                  <md-button  class="md-raised md-primary" ng-click="vm.hideCreateTeam()">Cancel</md-button>
+                  <md-button type="submit" class="md-raised md-primary"  ng-click="vm.createTeam()">Create</md-button>
+              </md-card-actions>
+            </md-content>
+          </form>   
         </md-card-content>
    
-        <md-card-content flex="60"> 
+        <!-- List details teams and add new user on team, show if create team is hide -->
+        <md-card-content flex="60" ng-show="!vm.isTeamCreating"> 
             <md-list class="md-dense">
               <md-subheader class="md-no-sticky">Members of the selected team</md-subheader>
               <md-list-item class="md-3-line" ng-repeat="item in vm.listTeams.select.members">         
                   <div class="md-list-item-text" layout="column">
                     <h3>{{ item.username }}</h3>
-                    <p>{{item.firstName}} {{item.lastName}}</p>
+                    <p>{{ item.firstName }} {{ item.lastName }}</p>
                     <p>{{ item.email }}</p>
                   </div>
                   </md-list-item>
@@ -83,7 +87,7 @@
               </md-list>
         </md-card-content>
         
-        <div layout="column">
+        <div layout="column" ng-show="!vm.isTeamCreating" flex="40">
           <form name="updateTeamForm">
             <md-card-content >
                 <label>Select your team</label>
@@ -100,9 +104,8 @@
                   </md-option>
                 </md-select> 
            
-
             <md-card-actions>
-                <md-button type="submit"  class="md-raised md-primary"  ng-click="vm.updateTeam()">Add user on team</md-button>
+                <md-button type="submit" class="md-raised md-primary"  ng-click="vm.updateTeam()">Add user on team</md-button>
             </md-card-actions>
           </md-card-content>
           </form>
@@ -112,7 +115,7 @@
   </div>
 
   <!-- Formulaire d'update -->
-  <md-card ng-show="vm.showUpdate">
+  <md-card ng-show="vm.isUpdating">
     <md-card-content>
         <form name="updateForm" >
             <md-content layout="column" layout-padding="">
