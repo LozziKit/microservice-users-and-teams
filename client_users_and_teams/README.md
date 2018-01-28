@@ -23,7 +23,7 @@ grunt dev
 The purpose of this application is to show you the possibilities offered by our microservice.
 
 ### Our service offers you
-     1. Create an user
+    1. Create an user
     2. Sign in with an existing account
     3. Update an existing account (except the username)
     4. Get an user with it username

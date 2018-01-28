@@ -57,10 +57,6 @@
 						// Save informations of users
 						homeService.setToken(response.data);
 						homeService.setUserName(response.data.username);
-						// Get inforamtions for profile
-						profileService.getUser(credentials.username);
-						profileService.getTeamsOfUser(credentials.username);
-						profileService.getUsers();
 					}, function (error) {
 						var status = {code: error.status, message: error.statusText, data:{}};
 						homeService.setStatus(status);

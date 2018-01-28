@@ -69,6 +69,9 @@
 			status.message = newStatus.message;
 			status.data = newStatus.data;
 		}
+		function getStatus(){
+			return status;
+		}
 		function setUserInfos(infos){
 			userInfos.username = infos.username;
 			userInfos.firstName = infos.firstName;
@@ -98,10 +101,9 @@
 			}
 		}
 
-	
-
 		return {
 			setStatus: setStatus,
+			getStatus: getStatus,
 			checkStatus: checkStatus,
 			setUserInfos: setUserInfos,	
 			getUserInfos: getUserInfos,	
